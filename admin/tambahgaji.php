@@ -13,17 +13,21 @@
         
         }
 
-        if(isset($_GET['hal']) == "hapus"){
-
-            $hapus = mysqli_query($koneksi, "DELETE FROM karyawan WHERE id = '$_GET[id]'");
-          
-            if($hapus){
+        if(isset($_POST['simpan'])){
+            $simpan = mysqli_query($koneksi, "INSERT INTO penggajian (id_karyawan, jabatan,bulan_gaji, gaji_pokok, status, tanggal_pembayaran,total_gaji) VALUES ('$_POST[id_karyawan]','$_POST[jabatan]','$_POST[bulan_gaji]','$_POST[gaji_pokok]','$_POST[status]','$_POST[tanggal_pembayaran]','$_POST[total_gaji]')");
+        
+            if($simpan){
                 echo "<script>
-                alert('Hapus data sukses!');
-                document.location='karyawan.php';
-                </script>";
+                        alert('Simpan data sukses!');
+                        document.location='gaji.php';
+                    </script>";
+            } else {
+                echo "<script>
+                        alert('Simpan data Gagal!');
+                        document.location='gaji.php';
+                    </script>";
             }
-          }
+        }
 
 ?>
 
@@ -345,61 +349,90 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-
                 <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Data Gaji</h1>
 
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                    <a href="tambahkaryawan.php" class="btn btn-primary btn-icon-split">
-                                    <span class="text">Tambah Data</span>
-                                </a>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Jabatan</th>
-                                        <th>Departemen</th>
-                                        <th>Status</th>
-                                        <th>Gaji Pokok</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                    $no = 1;
-                                    $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
-                                    while($data = mysqli_fetch_array($tampil)):
-                                ?>
-                                    <tr>
-                                        <td><?= $data['nama'] ?></td>
-                                        <td><?= $data['jabatan'] ?></td>
-                                        <td><?= $data['departemen'] ?></td> 
-                                        <td><?= $data['status'] ?></td> 
-                                        <td><?= $data['gaji_pokok'] ?></td> 
-                                        <td>
-                                        <a href="editkaryawan.php?hal=edit&id=<?= $data['id']?>" class="btn btn-warning btn-circle btn-sm">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </a>
-                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="karyawan.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        </td>
-                                    </tr>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <a href="karyawan.php" class="btn btn-success btn-icon-split">
+                                        <span class="text">Kembali</span>
+                                    </a>
+                        </div>
+                        <div class="card-body">
+                        <form method="post" class="user" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control form-control-user col-6"
+                                     readonly>
+                            </div>
+                            <div class="form-group"> 
+                                <select name="id_karyawan" id="id_karyawan"  class="form-control col-6" required>
+                                    <option value="" disabled selected>Pilih Karyawan</option>
+                                    <?php
+                                        $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                        while($data = mysqli_fetch_array($tampil)):
+                                    ?>
+                                    <option value="<?= $data['id'] ?>" data-gaji="<?= $data["gaji_pokok"] ?>" data-jabatan="<?= $data["jabatan"] ?>"  ><?= $data['nama'] ?></option>
                                     <?php
                                         endwhile; 
                                     ?>
-                                </tbody>
-                            </table>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="jabatan" class="form-control form-control-user col-6"
+                                    placeholder="Jabatan"  readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" name="gaji_pokok" class="form-control form-control-user col-6"
+                                    placeholder="Gaji Pokok" readonly>
+                            </div>
+                            <!-- <div class="form-group">
+                                <input type="number" name="tunjangan" class="form-control form-control-user col-6"
+                                    placeholder="Tunjangan" readonly>
+                            </div> -->
+                            <div class="form-group">
+                                <input type="text"  class="form-control form-control-user col-6"
+                                    placeholder="Potongan" value="10 Persen (10%)" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="total_gaji" name="total_gaji" class="form-control form-control-user col-6"
+                                    placeholder="Total Gaji" readonly>
+                            </div>
+                            <div class="form-group"> 
+                                <select name="bulan_gaji" class="form-control col-6" required>
+                                    <option value="" disabled selected>Pilih Bulan</option>
+                                    <option value="Januari">Januari</option>
+                                    <option value="Februari">Februari</option>
+                                    <option value="Maret">Maret</option>
+                                    <option value="April">April</option>
+                                    <option value="Mei">Mei</option>
+                                    <option value="Juni">Juni</option>
+                                    <option value="Juli">Juli</option>
+                                    <option value="Agustus">Agustus</option>
+                                    <option value="September">September</option>
+                                    <option value="Oktober">Oktober</option>
+                                    <option value="November">November</option>
+                                    <option value="Desember">Desember</option>
+                                </select>
+                            </div>
+                            <div class="form-group"> 
+                                <select name="status" class="form-control col-6" required>
+                                    <option value="" disabled selected>Status</option>
+                                    <option value="Belum Dibayar">Belum Dibayar</option>
+                                    <option value="Sudah Dibayar">Sudah Dibayar</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                            <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
+                                <span class="text">Simpan</span>
+                            </button>
+                            </div>
+                        </form>
                         </div>
                     </div>
-                </div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -465,6 +498,44 @@
     <script src="../assets/js/demo/chart-area-demo.js"></script>
     <script src="../assets/js/demo/chart-pie-demo.js"></script>
 
+
+
+    <script type="text/javascript">
+
+    $('#id_karyawan').on('change', function(){
+    // ambil data dari elemen option yang dipilih
+    const gapok = $('#id_karyawan option:selected').data('gaji');
+    const jabatan = $('#id_karyawan option:selected').data('jabatan');
+    
+    // kalkulasi total harga
+    
+    // tampilkan data ke element
+    $('[name=jabatan]').val(`${jabatan}`);
+    $('[name=gaji_pokok]').val(`${gapok}`);
+
+    const potongan = 0.1; // 10% potongan
+    const totalGaji = gapok * (1 - potongan); // Total gaji setelah potongan
+    $('#total_gaji').val(totalGaji.toFixed(2)); // Format to 2 decimal places
+    
+    });
+
+    </script>
+
+    <script>
+        // Mendapatkan tanggal saat ini
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0'); // Januari = 0
+        var year = today.getFullYear();
+
+        // Format tanggal menjadi YYYY-MM-DD
+        var currentDate = year + '-' + month + '-' + day;
+
+        // Set tanggal pada input field
+        document.getElementById('tanggal_pembayaran').value = currentDate;
+    </script>
+
 </body>
+
 
 </html>

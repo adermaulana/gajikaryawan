@@ -68,7 +68,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Admin</div>
             </a>
 
             <!-- Divider -->
@@ -86,7 +86,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Fitur
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -114,11 +114,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                        <a class="collapse-item" href="gaji.php">Gaji</a>
+                        <a class="collapse-item" href="tambahgaji.php">Tambah Data</a>
                     </div>
                 </div>
             </li>
@@ -133,11 +130,7 @@
                 <div id="laporanGaji" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                        <a class="collapse-item" href="laporan.php">Laporan</a>
                     </div>
                 </div>
             </li>
@@ -152,7 +145,7 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="pengaturan.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Pengaturan Gaji</span></a>
             </li>
@@ -372,10 +365,10 @@
                         <form method="post" class="user" enctype="multipart/form-data">
                             <div class="form-group">
                                 <input type="text" name="nama" class="form-control form-control-user col-6"
-                                    placeholder="Nama">
+                                    placeholder="Nama" required>
                             </div>
-                            <div class="form-group">
-                                <select name="jabatan" class="form-control col-6">
+                            <div class="form-group"> 
+                                <select name="jabatan" class="form-control col-6" required>
                                     <option value="" disabled selected>Pilih Jabatan</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Staff">Staff</option>
@@ -384,14 +377,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <select name="departemen" class="form-control col-6">
+                                <select name="departemen" class="form-control col-6" required>
                                     <option value="" disabled selected>Pilih Departemen</option>
                                     <option value="Keuangan">Keuangan</option>
                                     <option value="Sales">Sales</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <select name="status" class="form-control col-6">
+                                <select name="status" class="form-control col-6" required>
                                     <option value="" disabled selected>Pilih Status</option>
                                     <option value="Aktif">Aktif</option>
                                     <option value="Tidak Aktif">Tidak Aktif</option>
@@ -399,7 +392,7 @@
                             </div>
                             <div class="form-group">
                                 <input type="text" name="gaji_pokok" class="form-control form-control-user col-6"
-                                    placeholder="Gaji Pokok">
+                                    placeholder="Gaji Pokok" required>
                             </div>
                             <div class="form-group">
                             <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">

@@ -349,12 +349,12 @@
                 <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
+                <h1 class="h3 mb-2 text-gray-800">Data Gaji</h1>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                    <a href="tambahkaryawan.php" class="btn btn-primary btn-icon-split">
+                    <a href="tambahgaji.php" class="btn btn-primary btn-icon-split">
                                     <span class="text">Tambah Data</span>
                                 </a>
                     </div>
@@ -363,34 +363,31 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Nama</th>
                                         <th>Jabatan</th>
-                                        <th>Departemen</th>
-                                        <th>Status</th>
                                         <th>Gaji Pokok</th>
-                                        <th>Action</th>
+                                        <th>Potongan</th>
+                                        <th>Total Gaji</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                     $no = 1;
-                                    $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                    $tampil = mysqli_query($koneksi, "SELECT p.*, k.nama
+                                    FROM penggajian p
+                                    JOIN karyawan k ON p.id_karyawan = k.id");
                                     while($data = mysqli_fetch_array($tampil)):
                                 ?>
                                     <tr>
+                                        <td><?= $no++ ?></td>
                                         <td><?= $data['nama'] ?></td>
                                         <td><?= $data['jabatan'] ?></td>
-                                        <td><?= $data['departemen'] ?></td> 
-                                        <td><?= $data['status'] ?></td> 
                                         <td><?= $data['gaji_pokok'] ?></td> 
-                                        <td>
-                                        <a href="editkaryawan.php?hal=edit&id=<?= $data['id']?>" class="btn btn-warning btn-circle btn-sm">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </a>
-                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="karyawan.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        </td>
+                                        <td>10%</td> 
+                                        <td><?= $data['total_gaji'] ?></td> 
+                                        <td><span class="badge badge-success"><?= $data['status'] ?></span></td> 
                                     </tr>
                                     <?php
                                         endwhile; 
