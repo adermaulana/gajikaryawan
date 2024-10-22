@@ -13,27 +13,6 @@
         
         }
 
-        if(isset($_POST['simpan'])){
-
-            $password =md5($_POST['password']);
-
-            $simpan = mysqli_query($koneksi, "INSERT INTO karyawan (nama, username, password, jabatan, departemen, gaji_pokok, status) 
-            VALUES ('$_POST[nama]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]', '$_POST[gaji_pokok]', '$_POST[status]')");
-            
-        
-            if($simpan){
-                echo "<script>
-                        alert('Simpan data sukses!');
-                        document.location='karyawan.php';
-                    </script>";
-            } else {
-                echo "<script>
-                        alert('Simpan data Gagal!');
-                        document.location='karyawan.php';
-                    </script>";
-            }
-        }
-
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +26,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Dashboard Karyawan</title>
 
     <!-- Custom fonts for this template-->
     <link href="../assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -94,37 +73,6 @@
                 Fitur
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Data Karyawan</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="karyawan.php">Karyawan</a>
-                        <a class="collapse-item" href="tambahkaryawan.php">Tambah Data</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Penggajian</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="gaji.php">Gaji</a>
-                        <a class="collapse-item" href="tambahgaji.php">Tambah Data</a>
-                    </div>
-                </div>
-            </li>
-
                         <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
@@ -140,20 +88,6 @@
                 </div>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Setting
-            </div>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="pengaturan.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Pengaturan Gaji</span></a>
-            </li>
 
 
             <!-- Divider -->
@@ -333,7 +267,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_karyawan'] ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="../assets/img/undraw_profile.svg">
                             </a>
@@ -357,64 +291,118 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    </div>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <a href="karyawan.php" class="btn btn-success btn-icon-split">
-                                        <span class="text">Kembali</span>
-                                    </a>
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Jumlah Karyawan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                        <form method="post" class="user" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <input type="text" name="nama" class="form-control form-control-user col-6"
-                                    placeholder="Nama" required>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Gaji</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 50.000.000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="text" name="username" class="form-control form-control-user col-6"
-                                    placeholder="Username" required>
+                        </div>
+
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Jumlah Departemen</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="password" name="password" class="form-control form-control-user col-6"
-                                    placeholder="Password" required>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="jabatan" class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Jabatan</option>
-                                    <option value="Manager">Manager</option>
-                                    <option value="Staff">Staff</option>
-                                    <option value="Supervisor">Supervisor</option>
-                                    <option value="Intern">Intern</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <select name="departemen" class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Departemen</option>
-                                    <option value="Keuangan">Keuangan</option>
-                                    <option value="Sales">Sales</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <select name="status" class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Tidak Aktif">Tidak Aktif</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="gaji_pokok" class="form-control form-control-user col-6"
-                                    placeholder="Gaji Pokok" required>
-                            </div>
-                            <div class="form-group">
-                            <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
-                                <span class="text">Simpan</span>
-                            </button>
-                            </div>
-                        </form>
                         </div>
                     </div>
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Gaji Bulan Ini</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Jabatan</th>
+                                                    <th>Departemen</th>
+                                                    <th>Gaji Pokok</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                                $no = 1;
+                                                $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                                while($data = mysqli_fetch_array($tampil)):
+                                            ?>
+                                                <tr>
+                                                    <td><?= $data['jabatan'] ?></td>
+                                                    <td><?= $data['departemen'] ?></td> 
+                                                    <td><?= $data['gaji_pokok'] ?></td> 
+                                                    <td>
+                                                        <a class="badge badge-danger" href="">Belum Digaji</a>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                    endwhile; 
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                 </div>
                 <!-- /.container-fluid -->

@@ -17,6 +17,9 @@
         $login = mysqli_query($koneksi, "SELECT * FROM user WHERE username='$username' and password='$password'");
         $cek = mysqli_num_rows($login);
 
+        $loginKaryawan = mysqli_query($koneksi, "SELECT * FROM karyawan WHERE username='$username' and password='$password'");
+        $cekKaryawan = mysqli_num_rows($loginKaryawan);
+
         if($cek > 0) {
             $admin_data = mysqli_fetch_assoc($login);
             $_SESSION['id_admin'] = $admin_data['id'];
@@ -24,6 +27,14 @@
             $_SESSION['username_admin'] = $username;
             $_SESSION['status'] = "login";
             header('location:admin');
+
+        } else if ($cekKaryawan > 0) {
+            $admin_data = mysqli_fetch_assoc($loginKaryawan);
+            $_SESSION['id_karyawan'] = $admin_data['id'];
+            $_SESSION['nama_karyawan'] = $admin_data['nama'];
+            $_SESSION['username_karyawan'] = $username;
+            $_SESSION['status'] = "login";
+            header('location:karyawan');
 
         } else {
             echo "<script>
