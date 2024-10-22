@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2024 at 12:50 PM
+-- Generation Time: Oct 22, 2024 at 03:37 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -44,6 +44,8 @@ CREATE TABLE `gaji_detail` (
 CREATE TABLE `karyawan` (
   `id` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `jabatan` varchar(100) NOT NULL,
   `departemen` varchar(100) DEFAULT NULL,
   `gaji_pokok` decimal(15,2) NOT NULL,
@@ -55,8 +57,8 @@ CREATE TABLE `karyawan` (
 -- Dumping data for table `karyawan`
 --
 
-INSERT INTO `karyawan` (`id`, `nama`, `jabatan`, `departemen`, `gaji_pokok`, `status`, `tanggal_bergabung`) VALUES
-(3, 'Yanikim', 'Manager', 'Keuangan', 2000000.00, 'aktif', NULL);
+INSERT INTO `karyawan` (`id`, `nama`, `username`, `password`, `jabatan`, `departemen`, `gaji_pokok`, `status`, `tanggal_bergabung`) VALUES
+(5, 'yanikim', 'yanikim', '827ccb0eea8a706c4c34a16891f84e7b', 'Manager', 'Keuangan', 5000000.00, 'aktif', NULL);
 
 -- --------------------------------------------------------
 
@@ -87,13 +89,6 @@ CREATE TABLE `penggajian` (
   `status` varchar(255) NOT NULL,
   `tanggal_pembayaran` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `penggajian`
---
-
-INSERT INTO `penggajian` (`id`, `id_karyawan`, `jabatan`, `bulan_gaji`, `gaji_pokok`, `total_gaji`, `status`, `tanggal_pembayaran`) VALUES
-(2, 3, 'Manager', 'Oktober', 2000000, 1800000, 'Sudah Dibayar', '2024-10-15');
 
 -- --------------------------------------------------------
 
@@ -186,7 +181,7 @@ ALTER TABLE `gaji_detail`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pengaturan_gaji`
