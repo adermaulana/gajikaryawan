@@ -288,120 +288,88 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Laporan Gaji</h1>
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <!-- Form untuk filter tanggal -->
+                        <form method="GET" action="">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="start_date">Tanggal Awal:</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="end_date">Tanggal Akhir:</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
+                                        <th>Gaji Pokok</th>
+                                        <th>Potongan</th>
+                                        <th>Total Gaji</th>
+                                        <th>Tanggal Pembayaran</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    
+                                    // Ambil nilai filter tanggal
+                                    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+                                    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
-                    <!-- Content Row -->
-                    <div class="row">
+                                    // Query untuk menampilkan data berdasarkan filter tanggal
+                                    $query = "SELECT p.*, k.nama FROM penggajian p
+                                            JOIN karyawan k ON p.id_karyawan = k.id";
+                                    if ($start_date && $end_date) {
+                                        $query .= " WHERE p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
+                                    }
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Jumlah Karyawan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    $tampil = mysqli_query($koneksi, $query);
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Gaji</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 50.000.000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Jumlah Departemen</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Gaji Bulan Ini</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Jabatan</th>
-                                                    <th>Departemen</th>
-                                                    <th>Gaji Pokok</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php
-                                                $no = 1;
-                                                $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
-                                                while($data = mysqli_fetch_array($tampil)):
-                                            ?>
-                                                <tr>
-                                                    <td><?= $data['jabatan'] ?></td>
-                                                    <td><?= $data['departemen'] ?></td> 
-                                                    <td><?= $data['gaji_pokok'] ?></td> 
-                                                    <td>
-                                                        <a class="badge badge-danger" href="">Belum Digaji</a>
-                                                    </td>
-                                                </tr>
-                                                <?php
-                                                    endwhile; 
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                                    // Tampilkan data
+                                    while ($data = mysqli_fetch_array($tampil)) :
+                                    ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $data['nama'] ?></td>
+                                        <td><?= $data['jabatan'] ?></td>
+                                        <td><?= $data['gaji_pokok'] ?></td>
+                                        <td>10%</td>
+                                        <td><?= $data['total_gaji'] ?></td>
+                                        <td><?= $data['tanggal_pembayaran'] ?></td>
+                                        <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
+                                        <td>
+                                            <a href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>" class="btn btn-primary">Slip Gaji</a>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
+                </div>
 
 
                 </div>
