@@ -417,7 +417,6 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
                                                     <th>Departemen</th>
                                                     <th>Status</th>
                                                     <th>Gaji Pokok</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -432,11 +431,6 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
                                                     <td><?= $data['departemen'] ?></td> 
                                                     <td><?= $data['status'] ?></td> 
                                                     <td><?= $data['gaji_pokok'] ?></td> 
-                                                    <td>
-                                                    <a href="" class="btn btn-primary btn-sm">
-                                                        Beri Gaji
-                                                    </a>
-                                                    </td>
                                                 </tr>
                                                 <?php
                                                     endwhile; 
