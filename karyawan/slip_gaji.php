@@ -137,10 +137,10 @@ if ($result->num_rows > 0) {
     <div class="slip-container">
         <!-- Header Section -->
         <div class="header">
-            <img src="../assets/images/logo.png" alt="Company Logo" class="company-logo">
+            <img src="https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-248162.jpg?semt=ais_hybrid" alt="Company Logo" class="company-logo">
             <div class="company-name">PT. NAMA PERUSAHAAN</div>
             <div class="company-address">
-                Jl. Contoh No. 123, Jakarta Selatan<br>
+                Jl. Contoh No. 123, Makassar<br>
                 Telp: (021) 555-0123 | Email: info@perusahaan.com
             </div>
         </div>
@@ -181,14 +181,6 @@ if ($result->num_rows > 0) {
                     <div class="info-row">
                         <span class="info-label">Gaji Pokok</span>
                         <span class="info-value">Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Tunjangan Transport</span>
-                        <span class="info-value">Rp <?= number_format($data['gaji_pokok'] * 0.1, 0, ',', '.') ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Tunjangan Makan</span>
-                        <span class="info-value">Rp <?= number_format($data['gaji_pokok'] * 0.05, 0, ',', '.') ?></span>
                     </div>
                 </div>
                 <div class="col-md-6">
