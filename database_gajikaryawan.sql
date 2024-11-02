@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 24, 2024 at 11:48 PM
+-- Generation Time: Nov 02, 2024 at 09:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -96,20 +96,8 @@ CREATE TABLE `penggajian` (
 
 INSERT INTO `penggajian` (`id`, `id_karyawan`, `jabatan`, `bulan_gaji`, `gaji_pokok`, `total_gaji`, `status`, `tanggal_pembayaran`) VALUES
 (3, 5, 'Manager', 'Desember', 5000000, 4500000, 'Sudah Dibayar', '2024-10-25'),
-(4, 5, 'Manager', 'Oktober', 5000000, 4500000, 'Belum Dibayar', '2024-10-01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `slip_gaji`
---
-
-CREATE TABLE `slip_gaji` (
-  `id` int(11) NOT NULL,
-  `id_penggajian` int(11) DEFAULT NULL,
-  `id_karyawan` int(11) DEFAULT NULL,
-  `slip_pdf` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(4, 5, 'Manager', 'Oktober', 5000000, 4500000, 'Sudah Dibayar', '2024-10-01'),
+(5, 5, 'Manager', 'Februari', 5000000, 4500000, 'Belum Dibayar', '2024-11-03');
 
 -- --------------------------------------------------------
 
@@ -162,14 +150,6 @@ ALTER TABLE `penggajian`
   ADD KEY `id_karyawan` (`id_karyawan`);
 
 --
--- Indexes for table `slip_gaji`
---
-ALTER TABLE `slip_gaji`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_penggajian` (`id_penggajian`),
-  ADD KEY `id_karyawan` (`id_karyawan`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -201,13 +181,7 @@ ALTER TABLE `pengaturan_gaji`
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `slip_gaji`
---
-ALTER TABLE `slip_gaji`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -230,13 +204,6 @@ ALTER TABLE `gaji_detail`
 --
 ALTER TABLE `penggajian`
   ADD CONSTRAINT `penggajian_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`);
-
---
--- Constraints for table `slip_gaji`
---
-ALTER TABLE `slip_gaji`
-  ADD CONSTRAINT `slip_gaji_ibfk_1` FOREIGN KEY (`id_penggajian`) REFERENCES `penggajian` (`id`),
-  ADD CONSTRAINT `slip_gaji_ibfk_2` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

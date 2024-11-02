@@ -13,6 +13,19 @@
         
         }
 
+$id_karyawan = $_SESSION['id_karyawan'];       
+//get semua gaji
+$gaji = "SELECT SUM(total_gaji) as total_gaji FROM penggajian WHERE id_karyawan = '$id_karyawan'";
+$resultgaji = $koneksi->query($gaji);
+$rowgaji = $resultgaji->fetch_assoc();
+$total_gaji = $rowgaji["total_gaji"];
+
+//get semua karyawan
+$karyawan = "SELECT COUNT(*) as id FROM karyawan";
+$resultkaryawan = $koneksi->query($karyawan);
+$rowkaryawan = $resultkaryawan->fetch_assoc();
+$jumlah_karyawan = $rowkaryawan["id"];
+
 ?>
 
 <!DOCTYPE html>
@@ -299,14 +312,14 @@
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl-6 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Jumlah Karyawan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlah_karyawan ?> Orang</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -317,35 +330,17 @@
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl-6 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Gaji</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 50.000.000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. <?= number_format($total_gaji, 2, ',', '.') ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Jumlah Departemen</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -363,7 +358,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Gaji Bulan Ini</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Data Gaji Yang Belum Dibayar</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -380,16 +375,20 @@
                                             <tbody>
                                             <?php
                                                 $no = 1;
-                                                $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                                $tampil = mysqli_query($koneksi, "SELECT p.*, k.nama,k.departemen
+                                                                                FROM penggajian p
+                                                                                JOIN karyawan k ON p.id_karyawan = k.id WHERE p.status = 'Belum Dibayar' AND p.id_karyawan = '$id_karyawan'");
                                                 while($data = mysqli_fetch_array($tampil)):
                                             ?>
                                                 <tr>
                                                     <td><?= $data['jabatan'] ?></td>
                                                     <td><?= $data['departemen'] ?></td> 
-                                                    <td><?= $data['gaji_pokok'] ?></td> 
-                                                    <td>
-                                                        <a class="badge badge-danger" href="">Belum Digaji</a>
-                                                    </td>
+                                                    <td>Rp. <?= number_format($data['total_gaji'], 2, ',', '.') ?></td> 
+                                                    <?php if ($data['status'] == 'Sudah Dibayar'): ?>
+                                                    <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
+                                                    <?php else: ?>
+                                                    <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
+                                                    <?php endif; ?> 
                                                 </tr>
                                                 <?php
                                                     endwhile; 

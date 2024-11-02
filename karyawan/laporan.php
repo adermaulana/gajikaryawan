@@ -359,7 +359,11 @@
                                         <td>10%</td>
                                         <td><?= $data['total_gaji'] ?></td>
                                         <td><?= $data['tanggal_pembayaran'] ?></td>
+                                        <?php if ($data['status'] == 'Sudah Dibayar'): ?>
                                         <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
+                                        <?php else: ?>
+                                        <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
+                                        <?php endif; ?> 
                                         <td>
                                             <a href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>" class="btn btn-primary">Slip Gaji</a>
                                         </td>
