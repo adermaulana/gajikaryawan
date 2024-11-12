@@ -46,12 +46,86 @@
 
     <!-- Custom fonts for this template-->
     <link href="../assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+  /* Modern, clean, and engaging design */
+  body, html {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+    height: 100%;
+    color: #4a4a4a;
+  }
+
+  .sidebar {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: #ffffff;
+  }
+
+  .sidebar .nav-item .nav-link {
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .sidebar .nav-item.active .nav-link,
+  .sidebar .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+  }
+
+  .navbar {
+    background: #ffffff;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-brand, .navbar-nav .nav-link {
+    color: #4a4a4a;
+    font-weight: 600;
+  }
+
+  .card {
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4a4a4a;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    color: rgba(50, 115, 220, 0.8);
+  }
+
+  .badge {
+    padding: 8px 14px;
+    border-radius: 12px;
+  }
+
+  .badge-danger {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+  }
+
+  .badge-success {
+    background: linear-gradient(135deg, #42e695, #3bb2b8);
+    color: #fff;
+  }
+  </style>
 
 </head>
 
