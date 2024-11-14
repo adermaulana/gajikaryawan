@@ -13,6 +13,18 @@
         
         }
 
+        $start_date = '';
+        $end_date = '';
+        
+        // Ambil nilai filter tanggal dari $_GET jika ada
+        if(isset($_GET['start_date'])) {
+            $start_date = $_GET['start_date'];
+        }
+        if(isset($_GET['end_date'])) {
+            $end_date = $_GET['end_date'];
+        }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -382,12 +394,20 @@
                                     <label for="end_date">Tanggal Akhir:</label>
                                     <input type="date" name="end_date" id="end_date" class="form-control" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label>&nbsp;</label>
                                     <button type="submit" class="btn btn-primary btn-block">Filter</button>
                                 </div>
+                                <div class="col-md-2">
+                                <label>&nbsp;</label>
+                                <a href="cetak_laporan.php<?= ($start_date && $end_date) ? "?start_date=$start_date&end_date=$end_date" : "" ?>" 
+                                class="btn btn-success btn-block" target="_blank">
+                                    <i class="fas fa-print mr-2"></i>Cetak Laporan
+                                </a>
+                                </div>
                             </div>
                         </form>
+
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
