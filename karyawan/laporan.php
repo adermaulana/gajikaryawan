@@ -450,7 +450,13 @@
                                         <td><?= $data['nama'] ?></td>
                                         <td><?= $data['jabatan'] ?></td>
                                         <td><?= $data['gaji_pokok'] ?></td>
-                                        <td>10%</td>
+                                        <?php
+                                        // Query untuk mengambil nilai pajak
+                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
+                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
+                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                                        ?> 
+                                        <td><?= $nilai_pajak ?>%</td> 
                                         <td><?= $data['total_gaji'] ?></td>
                                         <td><?= $data['tanggal_pembayaran'] ?></td>
                                         <?php if ($data['status'] == 'Sudah Dibayar'): ?>

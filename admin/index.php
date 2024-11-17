@@ -172,6 +172,17 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
           </div>
         </div>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-file-alt"></i>
+          <span>Pengaturan Pajak</span>
+        </a>
+        <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
+          </div>
+        </div>
+      </li>
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
@@ -211,7 +222,7 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="card-title text-primary text-uppercase mb-1">Total Employees</div>
+                      <div class="card-title text-primary text-uppercase mb-1">Total Karyawan</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlah_karyawan ?></div>
                     </div>
                     <div class="col-auto">
@@ -227,7 +238,7 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="card-title text-success text-uppercase mb-1">Total Expenses</div>
+                      <div class="card-title text-success text-uppercase mb-1">Total Pengeluaran</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= "Rp" . number_format($total_pengeluaran, 2, ',', '.') ?></div>
                     </div>
                     <div class="col-auto">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2024 at 09:42 PM
+-- Generation Time: Nov 17, 2024 at 01:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,15 +63,20 @@ INSERT INTO `karyawan` (`id`, `nama`, `username`, `password`, `jabatan`, `depart
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pengaturan_gaji`
+-- Table structure for table `pajak`
 --
 
-CREATE TABLE `pengaturan_gaji` (
+CREATE TABLE `pajak` (
   `id` int(11) NOT NULL,
-  `gaji_pokok` decimal(15,2) NOT NULL,
-  `tunjangan` decimal(15,2) DEFAULT 0.00,
-  `potongan` decimal(15,2) DEFAULT 0.00
+  `pajak` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pajak`
+--
+
+INSERT INTO `pajak` (`id`, `pajak`) VALUES
+(4, 10);
 
 -- --------------------------------------------------------
 
@@ -97,7 +102,10 @@ CREATE TABLE `penggajian` (
 INSERT INTO `penggajian` (`id`, `id_karyawan`, `jabatan`, `bulan_gaji`, `gaji_pokok`, `total_gaji`, `status`, `tanggal_pembayaran`) VALUES
 (3, 5, 'Manager', 'Desember', 5000000, 4500000, 'Sudah Dibayar', '2024-10-25'),
 (4, 5, 'Manager', 'Oktober', 5000000, 4500000, 'Sudah Dibayar', '2024-10-01'),
-(5, 5, 'Manager', 'Februari', 5000000, 4500000, 'Belum Dibayar', '2024-11-03');
+(5, 5, 'Manager', 'Februari', 5000000, 4500000, 'Belum Dibayar', '2024-11-03'),
+(6, 5, 'Manager', 'Januari', 5000000, 4450000, 'Belum Dibayar', '2024-11-17'),
+(7, 5, 'Manager', 'Februari', 5000000, 4450000, 'Belum Dibayar', '2024-11-17'),
+(8, 5, 'Manager', 'Desember', 5000000, 4450000, 'Belum Dibayar', '2024-11-17');
 
 -- --------------------------------------------------------
 
@@ -137,9 +145,9 @@ ALTER TABLE `karyawan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pengaturan_gaji`
+-- Indexes for table `pajak`
 --
-ALTER TABLE `pengaturan_gaji`
+ALTER TABLE `pajak`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -172,16 +180,16 @@ ALTER TABLE `karyawan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `pengaturan_gaji`
+-- AUTO_INCREMENT for table `pajak`
 --
-ALTER TABLE `pengaturan_gaji`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pajak`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user`

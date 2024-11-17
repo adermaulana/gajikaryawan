@@ -215,7 +215,17 @@
                     </div>
                 </div>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-file-alt"></i>
+                <span>Pengaturan Pajak</span>
+                </a>
+                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
+                </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -374,7 +384,13 @@
                                         <td><?= $data['nama'] ?></td>
                                         <td><?= $data['jabatan'] ?></td>
                                         <td><?= $data['gaji_pokok'] ?></td>
-                                        <td>10%</td>
+                                        <?php
+                                        // Query untuk mengambil nilai pajak
+                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
+                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
+                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                                        ?> 
+                                        <td><?= $nilai_pajak ?>%</td> 
                                         <td><?= $data['total_gaji'] ?></td>
                                         <td><?= $data['tanggal_pembayaran'] ?></td>
                                         <td><span class="badge badge-success"><?= $data['status'] ?></span></td>

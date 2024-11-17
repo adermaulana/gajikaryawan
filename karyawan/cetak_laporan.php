@@ -89,7 +89,13 @@ $result = mysqli_query($koneksi, $query);
                 <td><?= $data['nama'] ?></td>
                 <td><?= $data['jabatan'] ?></td>
                 <td class="currency">Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
-                <td>10%</td>
+                <?php
+                                        // Query untuk mengambil nilai pajak
+                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
+                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
+                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                                        ?> 
+                                        <td><?= $nilai_pajak ?>%</td> 
                 <td class="currency">Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
                 <td><?= date('d/m/Y', strtotime($data['tanggal_pembayaran'])) ?></td>
                 <td><?= $data['status'] ?></td>

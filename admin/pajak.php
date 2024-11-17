@@ -13,21 +13,60 @@
         
         }
 
-        if(isset($_POST['simpan'])){
-            $simpan = mysqli_query($koneksi, "INSERT INTO penggajian (id_karyawan, jabatan,bulan_gaji, gaji_pokok, status, tanggal_pembayaran,total_gaji) VALUES ('$_POST[id_karyawan]','$_POST[jabatan]','$_POST[bulan_gaji]','$_POST[gaji_pokok]','$_POST[status]','$_POST[tanggal_pembayaran]','$_POST[total_gaji]')");
-        
-            if($simpan){
+        if(isset($_POST['simpan'])) {
+            $pajak = mysqli_real_escape_string($koneksi, $_POST['pajak']);
+            
+            // Validasi input tidak boleh kosong
+            if(empty($pajak)) {
                 echo "<script>
-                        alert('Simpan data sukses!');
-                        document.location='gaji.php';
+                        alert('Data pajak tidak boleh kosong!');
+                        document.location='pajak.php';
                     </script>";
+                exit;
+            }
+            
+            // Cek apakah data pajak sudah ada berdasarkan ID
+            $cek_pajak = mysqli_query($koneksi, "SELECT id FROM pajak LIMIT 1");
+            
+            if(mysqli_num_rows($cek_pajak) > 0) {
+                // Ambil ID pajak yang ada
+                $row = mysqli_fetch_assoc($cek_pajak);
+                $id_pajak = $row['id'];
+                
+                // Jika data sudah ada, lakukan update berdasarkan ID
+                $update = mysqli_query($koneksi, "UPDATE pajak SET pajak = '$pajak' WHERE id = $id_pajak");
+                
+                if($update) {
+                    echo "<script>
+                            alert('Update data sukses!');
+                            document.location='pajak.php';
+                        </script>";
+                } else {
+                    echo "<script>
+                            alert('Update data Gagal!');
+                            document.location='pajak.php';
+                        </script>";
+                }
             } else {
-                echo "<script>
-                        alert('Simpan data Gagal!');
-                        document.location='gaji.php';
-                    </script>";
+                // Jika data belum ada sama sekali, lakukan insert
+                $simpan = mysqli_query($koneksi, "INSERT INTO pajak (pajak) VALUES ('$pajak')");
+            
+                if($simpan) {
+                    echo "<script>
+                            alert('Simpan data sukses!');
+                            document.location='pajak.php';
+                        </script>";
+                } else {
+                    echo "<script>
+                            alert('Simpan data Gagal!');
+                            document.location='pajak.php';
+                        </script>";
+                }
             }
         }
+
+        $query = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
+        $data = mysqli_fetch_assoc($query);
 
 ?>
 
@@ -306,7 +345,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Data Gaji</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Data Pajak</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -318,74 +357,9 @@
                         <div class="card-body">
                         <form method="post" class="user" enctype="multipart/form-data">
                             <div class="form-group">
-                                <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control form-control-user col-6"
-                                     readonly>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="id_karyawan" id="id_karyawan"  class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Karyawan</option>
-                                    <?php
-                                        $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
-                                        while($data = mysqli_fetch_array($tampil)):
-                                    ?>
-                                    <option value="<?= $data['id'] ?>" data-gaji="<?= $data["gaji_pokok"] ?>" data-jabatan="<?= $data["jabatan"] ?>"  ><?= $data['nama'] ?></option>
-                                    <?php
-                                        endwhile; 
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="jabatan" class="form-control form-control-user col-6"
-                                    placeholder="Jabatan"  readonly>
-                            </div>
-                            <div class="form-group">
-                                <input type="number" name="gaji_pokok" class="form-control form-control-user col-6"
-                                    placeholder="Gaji Pokok" readonly>
-                            </div>
-                            <!-- <div class="form-group">
-                                <input type="number" name="tunjangan" class="form-control form-control-user col-6"
-                                    placeholder="Tunjangan" readonly>
-                            </div> -->
-
-                            <?php
-                            // Query untuk mengambil nilai pajak
-                            $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-                            $data_pajak = mysqli_fetch_assoc($query_pajak);
-                            $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                            ?>
-
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-user col-6"
-                                    placeholder="Potongan" value="<?= $nilai_pajak ?> Persen (<?= $nilai_pajak ?>%)" readonly>
-                            </div>
-                            <div class="form-group">
-                                <input type="number" id="total_gaji" name="total_gaji" class="form-control form-control-user col-6"
-                                    placeholder="Total Gaji" readonly>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="bulan_gaji" class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Bulan</option>
-                                    <option value="Januari">Januari</option>
-                                    <option value="Februari">Februari</option>
-                                    <option value="Maret">Maret</option>
-                                    <option value="April">April</option>
-                                    <option value="Mei">Mei</option>
-                                    <option value="Juni">Juni</option>
-                                    <option value="Juli">Juli</option>
-                                    <option value="Agustus">Agustus</option>
-                                    <option value="September">September</option>
-                                    <option value="Oktober">Oktober</option>
-                                    <option value="November">November</option>
-                                    <option value="Desember">Desember</option>
-                                </select>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="status" class="form-control col-6" required>
-                                    <option value="" disabled selected>Status</option>
-                                    <option value="Belum Dibayar">Belum Dibayar</option>
-                                    <option value="Sudah Dibayar">Sudah Dibayar</option>
-
-                                </select>
+                                <label for="">Pajak(%)</label>
+                                <input type="text" name="pajak" value="<?= $data['pajak'] ?>" class="form-control form-control-user col-6"
+                                    placeholder="Pajak">
                             </div>
                             <div class="form-group">
                             <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
@@ -464,8 +438,6 @@
 
     <script type="text/javascript">
 
-    const nilai_pajak = <?php echo $nilai_pajak; ?>;
-
     $('#id_karyawan').on('change', function(){
     // ambil data dari elemen option yang dipilih
     const gapok = $('#id_karyawan option:selected').data('gaji');
@@ -477,9 +449,10 @@
     $('[name=jabatan]').val(`${jabatan}`);
     $('[name=gaji_pokok]').val(`${gapok}`);
 
-    const potongan = nilai_pajak / 100; // Konversi persen ke desimal
+    const potongan = 0.1; // 10% potongan
     const totalGaji = gapok * (1 - potongan); // Total gaji setelah potongan
-    $('#total_gaji').val(Math.round(totalGaji)); // Bulatkan ke angka terdekat
+    $('#total_gaji').val(totalGaji.toFixed(2)); // Format to 2 decimal places
+    
     });
 
     </script>

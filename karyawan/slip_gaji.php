@@ -3,6 +3,13 @@ include '../koneksi.php';
 
 $id_karyawan = $_GET['id_karyawan'];
 
+// Get tax percentage
+$query_pajak = "SELECT pajak FROM pajak ORDER BY id DESC LIMIT 1";
+$result_pajak = $koneksi->query($query_pajak);
+$pajak = $result_pajak->fetch_assoc();
+$persentase_pajak = $pajak['pajak'];
+
+// Get employee and salary data
 $query = "SELECT p.*, k.nama, k.jabatan, k.departemen FROM penggajian p
           JOIN karyawan k ON p.id_karyawan = k.id
           WHERE k.id = ?";
@@ -13,6 +20,11 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $data = $result->fetch_assoc();
+    
+    // Calculate tax
+    $potongan_pajak = $data['gaji_pokok'] * ($persentase_pajak / 100);
+    // Calculate final salary
+    $gaji_bersih = $data['gaji_pokok'] - $potongan_pajak;
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,7 +146,7 @@ if ($result->num_rows > 0) {
     </style>
 </head>
 <body>
-    <div class="slip-container">
+<div class="slip-container">
         <!-- Header Section -->
         <div class="header">
             <img src="https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-248162.jpg?semt=ais_hybrid" alt="Company Logo" class="company-logo">
@@ -185,16 +197,8 @@ if ($result->num_rows > 0) {
                 </div>
                 <div class="col-md-6">
                     <div class="info-row">
-                        <span class="info-label">Potongan PPh 21</span>
-                        <span class="info-value">Rp <?= number_format($data['gaji_pokok'] * 0.05, 0, ',', '.') ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Potongan BPJS</span>
-                        <span class="info-value">Rp <?= number_format($data['gaji_pokok'] * 0.02, 0, ',', '.') ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Potongan Lainnya</span>
-                        <span class="info-value">Rp <?= number_format($data['gaji_pokok'] * 0.03, 0, ',', '.') ?></span>
+                        <span class="info-label">Potongan Pajak (<?= $persentase_pajak ?>%)</span>
+                        <span class="info-value">Rp <?= number_format($potongan_pajak, 0, ',', '.') ?></span>
                     </div>
                 </div>
             </div>
@@ -203,7 +207,7 @@ if ($result->num_rows > 0) {
             <div class="total-section">
                 <div class="info-row">
                     <span class="info-label">Total Gaji Diterima</span>
-                    <span class="info-value total-amount">Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></span>
+                    <span class="info-value total-amount">Rp <?= number_format($gaji_bersih, 0, ',', '.') ?></span>
                 </div>
             </div>
         </div>

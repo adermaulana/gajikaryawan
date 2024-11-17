@@ -212,7 +212,17 @@
                     </div>
                 </div>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-file-alt"></i>
+                <span>Pengaturan Pajak</span>
+                </a>
+                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
+                </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 
