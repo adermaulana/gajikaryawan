@@ -13,17 +13,7 @@
         
         }
 
-        $start_date = '';
-        $end_date = '';
-        
-        // Ambil nilai filter tanggal dari $_GET jika ada
-        if(isset($_GET['start_date'])) {
-            $start_date = $_GET['start_date'];
-        }
-        if(isset($_GET['end_date'])) {
-            $end_date = $_GET['end_date'];
-        }
-
+$id_karyawan = $_SESSION['id_karyawan'];
 
 ?>
 
@@ -390,100 +380,30 @@
                 <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Laporan Gaji</h1>
+                <h1 class="h3 mb-2 text-gray-800">Pengajuan Gaji</h1>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <!-- Form untuk filter tanggal -->
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="start_date">Tanggal Awal:</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="end_date">Tanggal Akhir:</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
-                                </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                                </div>
-                                <div class="col-md-2">
-                                <label>&nbsp;</label>
-                                <a href="cetak_laporan.php<?= ($start_date && $end_date) ? "?start_date=$start_date&end_date=$end_date" : "" ?>" 
-                                class="btn btn-success btn-block" target="_blank">
-                                    <i class="fas fa-print mr-2"></i>Cetak Laporan
-                                </a>
-                                </div>
-                            </div>
-                        </form>
-
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Jabatan</th>
-                                        <th>Gaji Pokok</th>
-                                        <th>Potongan</th>
-                                        <th>Total Gaji</th>
-                                        <th>Tanggal Pembayaran</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $no = 1;
-                                    
-                                    // Ambil nilai filter tanggal
-                                    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
-                                    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
-
-                                    // Query untuk menampilkan data berdasarkan filter tanggal
-                                    $query = "SELECT p.*, k.nama FROM penggajian p
-                                            JOIN karyawan k ON p.id_karyawan = k.id";
-                                    if ($start_date && $end_date) {
-                                        $query .= " WHERE p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
-                                    }
-
-                                    $tampil = mysqli_query($koneksi, $query);
-
-                                    // Tampilkan data
-                                    while ($data = mysqli_fetch_array($tampil)) :
-                                    ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= $data['nama'] ?></td>
-                                        <td><?= $data['jabatan'] ?></td>
-                                        <td><?= $data['gaji_pokok'] ?></td>
-                                        <?php
-                                        // Query untuk mengambil nilai pajak
-                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
-                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                                        ?> 
-                                        <td><?= $nilai_pajak ?>%</td> 
-                                        <td><?= $data['total_gaji'] ?></td>
-                                        <td><?= $data['tanggal_pembayaran'] ?></td>
-                                        <?php if ($data['status'] == 'Sudah Dibayar'): ?>
-                                        <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
-                                        <?php else: ?>
-                                        <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
-                                        <?php endif; ?> 
-                                        <td>
-                                            <a href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>" class="btn btn-primary">Slip Gaji</a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                    <form action="proses_tambah_pengajuan.php" method="POST">
+                        <input type="hidden" name="id_karyawan" value="<?= $id_karyawan ?>">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nominal">Nominal Pengajuan</label>
+                                <input type="number" class="form-control" id="nominal" name="nominal" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alasan">Alasan Pengajuan</label>
+                                <textarea class="form-control" id="alasan" name="alasan" rows="3" required></textarea>
+                            </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Ajukan</button>
+                        </div>
+                    </form>
                     </div>
                 </div>
 

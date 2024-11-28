@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2024 at 01:37 PM
+-- Generation Time: Nov 28, 2024 at 01:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -81,6 +81,27 @@ INSERT INTO `pajak` (`id`, `pajak`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pengajuan`
+--
+
+CREATE TABLE `pengajuan` (
+  `id` int(11) NOT NULL,
+  `id_karyawan` int(11) NOT NULL,
+  `nominal` decimal(10,0) NOT NULL,
+  `alasan` text NOT NULL,
+  `status` enum('pending','diterima','ditolak') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pengajuan`
+--
+
+INSERT INTO `pengajuan` (`id`, `id_karyawan`, `nominal`, `alasan`, `status`) VALUES
+(1, 5, 20000000, 'Saya rasa gaji saya harus ditambah brow', 'pending');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `penggajian`
 --
 
@@ -151,6 +172,13 @@ ALTER TABLE `pajak`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pengajuan`
+--
+ALTER TABLE `pengajuan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_karyawan` (`id_karyawan`);
+
+--
 -- Indexes for table `penggajian`
 --
 ALTER TABLE `penggajian`
@@ -186,6 +214,12 @@ ALTER TABLE `pajak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `pengajuan`
+--
+ALTER TABLE `pengajuan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
@@ -206,6 +240,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `gaji_detail`
   ADD CONSTRAINT `gaji_detail_ibfk_1` FOREIGN KEY (`id_penggajian`) REFERENCES `penggajian` (`id`);
+
+--
+-- Constraints for table `pengajuan`
+--
+ALTER TABLE `pengajuan`
+  ADD CONSTRAINT `pengajuan_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `penggajian`

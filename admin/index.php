@@ -183,6 +183,21 @@ $total_pengeluaran = $rowpengeluaran["total_pengeluaran"];
           </div>
         </div>
       </li>
+
+      <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengajuan"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Pengajuan Naik Gaji</span>
+                </a>
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
+                    </div>
+                </div>
+            </li>   
+
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
