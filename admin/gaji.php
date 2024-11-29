@@ -91,10 +91,7 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+
 
   .card-title {
     font-size: 1.2rem;
