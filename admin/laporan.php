@@ -407,7 +407,11 @@
                                         <td><?= $nilai_pajak ?>%</td> 
                                         <td><?= $data['total_gaji'] ?></td>
                                         <td><?= $data['tanggal_pembayaran'] ?></td>
+                                        <?php if ($data['status'] == 'Sudah Dibayar'): ?>
                                         <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
+                                        <?php else: ?>
+                                        <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
+                                        <?php endif; ?> 
                                     </tr>
                                     <?php endwhile; ?>
                                 </tbody>
