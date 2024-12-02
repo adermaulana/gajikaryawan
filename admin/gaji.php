@@ -403,7 +403,7 @@
                                         
                                         <?php endif; ?> 
                                         <td>
-                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="karyawan.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
+                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="gaji.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                         </td>
