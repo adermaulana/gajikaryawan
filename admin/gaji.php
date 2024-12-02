@@ -15,12 +15,12 @@
 
         if(isset($_GET['hal']) == "hapus"){
 
-            $hapus = mysqli_query($koneksi, "DELETE FROM karyawan WHERE id = '$_GET[id]'");
+            $hapus = mysqli_query($koneksi, "DELETE FROM penggajian WHERE id = '$_GET[id]'");
           
             if($hapus){
                 echo "<script>
                 alert('Hapus data sukses!');
-                document.location='karyawan.php';
+                document.location='gaji.php';
                 </script>";
             }
           }
@@ -336,6 +336,7 @@
                                         <th>Potongan</th>
                                         <th>Total Gaji</th>
                                         <th>Status</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -401,7 +402,11 @@
                                         </td>
                                         
                                         <?php endif; ?> 
-                                        
+                                        <td>
+                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="karyawan.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        </td>
                                     </tr>
                                     <?php
                                         endwhile; 
