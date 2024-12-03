@@ -43,6 +43,7 @@
         $departemen = mysqli_real_escape_string($koneksi, $_POST['departemen']);
         $gaji_pokok = mysqli_real_escape_string($koneksi, $_POST['gaji_pokok']);
         $status = mysqli_real_escape_string($koneksi, $_POST['status']);
+        $email = mysqli_real_escape_string($koneksi, $_POST['email']);
 
         // Check if password is being changed
         $password_update = '';
@@ -55,6 +56,7 @@
         $update = mysqli_query($koneksi, "UPDATE karyawan 
                                 SET 
                                 nama = '$nama', 
+                                email = '$email', 
                                 username = '$username', 
                                 jabatan = '$jabatan', 
                                 departemen = '$departemen', 
@@ -380,6 +382,10 @@
                                 <div class="form-group">
                                     <input type="text" name="nama" class="form-control form-control-user col-6"
                                         placeholder="Nama" value="<?= htmlspecialchars($karyawan['nama']) ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="email" class="form-control form-control-user col-6"
+                                        placeholder="Email" value="<?= htmlspecialchars($karyawan['email']) ?>" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="username" class="form-control form-control-user col-6"

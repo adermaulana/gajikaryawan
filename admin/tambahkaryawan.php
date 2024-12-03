@@ -17,8 +17,8 @@
 
             $password =md5($_POST['password']);
 
-            $simpan = mysqli_query($koneksi, "INSERT INTO karyawan (nama, username, password, jabatan, departemen, gaji_pokok, status) 
-            VALUES ('$_POST[nama]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]', '$_POST[gaji_pokok]', '$_POST[status]')");
+            $simpan = mysqli_query($koneksi, "INSERT INTO karyawan (nama,email, username, password, jabatan, departemen, gaji_pokok, status) 
+            VALUES ('$_POST[nama]','$_POST[email]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]', '$_POST[gaji_pokok]', '$_POST[status]')");
             
         
             if($simpan){
@@ -338,6 +338,10 @@
                             <div class="form-group">
                                 <input type="text" name="nama" class="form-control form-control-user col-6"
                                     placeholder="Nama" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="email" class="form-control form-control-user col-6"
+                                    placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <input type="text" name="username" class="form-control form-control-user col-6"

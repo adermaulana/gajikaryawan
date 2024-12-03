@@ -333,6 +333,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
+                                        <th>Email</th>
                                         <th>Jabatan</th>
                                         <th>Departemen</th>
                                         <th>Status</th>
@@ -348,6 +349,7 @@
                                 ?>
                                     <tr>
                                         <td><?= $data['nama'] ?></td>
+                                        <td><?= $data['email'] ?></td>
                                         <td><?= $data['jabatan'] ?></td>
                                         <td><?= $data['departemen'] ?></td> 
                                         <td><?= $data['status'] ?></td> 

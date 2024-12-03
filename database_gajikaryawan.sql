@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 28, 2024 at 01:19 PM
+-- Generation Time: Dec 03, 2024 at 04:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,6 +44,7 @@ CREATE TABLE `gaji_detail` (
 CREATE TABLE `karyawan` (
   `id` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `jabatan` varchar(100) NOT NULL,
@@ -57,8 +58,8 @@ CREATE TABLE `karyawan` (
 -- Dumping data for table `karyawan`
 --
 
-INSERT INTO `karyawan` (`id`, `nama`, `username`, `password`, `jabatan`, `departemen`, `gaji_pokok`, `status`, `tanggal_bergabung`) VALUES
-(5, 'yanikim', 'yanikim', '827ccb0eea8a706c4c34a16891f84e7b', 'Manager', 'Keuangan', 5000000.00, 'aktif', NULL);
+INSERT INTO `karyawan` (`id`, `nama`, `email`, `username`, `password`, `jabatan`, `departemen`, `gaji_pokok`, `status`, `tanggal_bergabung`) VALUES
+(6, 'udin', 'adermaulana15@gmail.com', 'udin', '6bec9c852847242e384a4d5ac0962ba0', 'Staff', 'Keuangan', 50000000.00, 'aktif', NULL);
 
 -- --------------------------------------------------------
 
@@ -97,7 +98,7 @@ CREATE TABLE `pengajuan` (
 --
 
 INSERT INTO `pengajuan` (`id`, `id_karyawan`, `nominal`, `alasan`, `status`) VALUES
-(1, 5, 20000000, 'Saya rasa gaji saya harus ditambah brow', 'pending');
+(2, 6, 5000000, 'Saya mau naik gaji', 'ditolak');
 
 -- --------------------------------------------------------
 
@@ -121,12 +122,7 @@ CREATE TABLE `penggajian` (
 --
 
 INSERT INTO `penggajian` (`id`, `id_karyawan`, `jabatan`, `bulan_gaji`, `gaji_pokok`, `total_gaji`, `status`, `tanggal_pembayaran`) VALUES
-(3, 5, 'Manager', 'Desember', 5000000, 4500000, 'Sudah Dibayar', '2024-10-25'),
-(4, 5, 'Manager', 'Oktober', 5000000, 4500000, 'Sudah Dibayar', '2024-10-01'),
-(5, 5, 'Manager', 'Februari', 5000000, 4500000, 'Belum Dibayar', '2024-11-03'),
-(6, 5, 'Manager', 'Januari', 5000000, 4450000, 'Belum Dibayar', '2024-11-17'),
-(7, 5, 'Manager', 'Februari', 5000000, 4450000, 'Belum Dibayar', '2024-11-17'),
-(8, 5, 'Manager', 'Desember', 5000000, 4450000, 'Belum Dibayar', '2024-11-17');
+(9, 6, 'Staff', 'Januari', 5000000, 4500000, 'Sudah Dibayar', '2024-11-29');
 
 -- --------------------------------------------------------
 
@@ -205,7 +201,7 @@ ALTER TABLE `gaji_detail`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `pajak`
@@ -217,13 +213,13 @@ ALTER TABLE `pajak`
 -- AUTO_INCREMENT for table `pengajuan`
 --
 ALTER TABLE `pengajuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -251,7 +247,7 @@ ALTER TABLE `pengajuan`
 -- Constraints for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  ADD CONSTRAINT `penggajian_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`);
+  ADD CONSTRAINT `penggajian_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
