@@ -1,15 +1,19 @@
 <?php
 require_once '../koneksi.php';
 
+session_start();
+
+$id_karyawan = $_SESSION['id_karyawan'];
 // Ambil parameter tanggal jika ada
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
 // Query untuk mengambil data
 $query = "SELECT p.*, k.nama FROM penggajian p
-          JOIN karyawan k ON p.id_karyawan = k.id";
+          JOIN karyawan k ON p.id_karyawan = k.id
+          WHERE p.id_karyawan = '$id_karyawan'";
 if ($start_date && $end_date) {
-    $query .= " WHERE p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
+    $query .= " AND p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
 }
 
 $result = mysqli_query($koneksi, $query);
@@ -75,14 +79,17 @@ $result = mysqli_query($koneksi, $query);
         <thead>
             <tr>
                 <th>No</th>
+                <th>Tanggal Pembayaran</th>
                 <th>Nama</th>
                 <th>Jabatan</th>
                 <th>Gaji Pokok</th>
                 <th>Potongan</th>
+                <th>Hadir</th>
+                <th>Alpa</th>
+                <th>Sakit</th>
                 <th>Jam Lembur</th>
                 <th>Bayaran Lembur</th>
                 <th>Total Gaji</th>
-                <th>Tanggal Pembayaran</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -95,6 +102,7 @@ $result = mysqli_query($koneksi, $query);
             ?>
             <tr>
                 <td><?= $no++ ?></td>
+                <td><?= date('d/m/Y', strtotime($data['tanggal_pembayaran'])) ?></td>
                 <td><?= $data['nama'] ?></td>
                 <td><?= $data['jabatan'] ?></td>
                 <td class="currency">Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
@@ -105,16 +113,18 @@ $result = mysqli_query($koneksi, $query);
                 $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
                 ?>
                 <td><?= $nilai_pajak ?>%</td>
+                <td><?= $data['hadir'] ?> Hari</td>
+                <td><?= $data['alpa'] ?> Hari</td>
+                <td><?= $data['sakit'] ?> Hari</td>
                 <td><?= $data['jam_lembur'] ?> Jam</td>
                 <td class="currency">Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
                 <td class="currency">Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
-                <td><?= date('d/m/Y', strtotime($data['tanggal_pembayaran'])) ?></td>
                 <td><?= $data['status'] ?></td>
             </tr>
             <?php endwhile; ?>
             <!-- Menambahkan total gaji -->
             <tr>
-                <td colspan="5" style="text-align: right;"><strong>Total Gaji:</strong></td>
+                <td colspan="11" style="text-align: right;"><strong>Total Gaji:</strong></td>
                 <td class="currency"><strong>Rp <?= number_format($total_semua_gaji, 0, ',', '.') ?></strong></td>
                 <td colspan="2"></td>
             </tr>

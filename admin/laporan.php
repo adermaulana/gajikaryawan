@@ -360,6 +360,9 @@ if (isset($_GET['end_date'])) {
                                             <th>Jabatan</th>
                                             <th>Gaji Pokok</th>
                                             <th>Potongan</th>
+                                            <th>Hadir</th>
+                                            <th>Alpa</th>
+                                            <th>Sakit</th>
                                             <th>Jam Lembur</th>
                                             <th>Bayaran Lembur</th>
                                             <th>Total Gaji</th>
@@ -399,6 +402,9 @@ if (isset($_GET['end_date'])) {
                                             $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
                                             ?>
                                             <td><?= $nilai_pajak ?>%</td>
+                                            <td><?= $data['hadir'] ?> Hari</td>
+                                            <td><?= $data['alpa'] ?> Hari</td>
+                                            <td><?= $data['sakit'] ?> Hari</td>
                                             <td><?= $data['jam_lembur'] ?> Jam</td>
                                             <td>Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>

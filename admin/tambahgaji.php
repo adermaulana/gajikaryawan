@@ -12,18 +12,55 @@ if ($_SESSION['status'] != 'login') {
 }
 
 if (isset($_POST['simpan'])) {
-    $simpan = mysqli_query($koneksi, "INSERT INTO penggajian (id_karyawan, jabatan,bulan_gaji, gaji_pokok, status, tanggal_pembayaran,jam_lembur,bayaran_lembur,total_gaji) VALUES ('$_POST[id_karyawan]','$_POST[jabatan]','$_POST[bulan_gaji]','$_POST[gaji_pokok]','$_POST[status]','$_POST[tanggal_pembayaran]','$_POST[jam_lembur]','$_POST[bayaran_lembur]','$_POST[total_gaji]')");
+    // Extract the month and year from the input
+    $bulan_gaji = $_POST['bulan_gaji'];
+    $tanggal_pembayaran = $_POST['tanggal_pembayaran'];
+    $id_karyawan = $_POST['id_karyawan'];
 
-    if ($simpan) {
+    // Check for existing entry for the same month, year, and employee
+    $cek_duplikat = mysqli_query(
+        $koneksi,
+        "SELECT * FROM penggajian 
+        WHERE id_karyawan = '$id_karyawan' 
+        AND bulan_gaji = '$bulan_gaji' 
+        AND YEAR(tanggal_pembayaran) = YEAR('$tanggal_pembayaran')",
+    );
+
+    if (mysqli_num_rows($cek_duplikat) > 0) {
+        // Duplicate entry found
         echo "<script>
-                        alert('Simpan data sukses!');
-                        document.location='gaji.php';
-                    </script>";
+            alert('Data gaji untuk $bulan_gaji tahun " .
+            date('Y', strtotime($tanggal_pembayaran)) .
+            " sudah ada!');
+            document.location='tambahgaji.php';
+        </script>";
     } else {
-        echo "<script>
-                        alert('Simpan data Gagal!');
-                        document.location='gaji.php';
-                    </script>";
+        // No duplicate found, proceed with insertion
+        $simpan = mysqli_query(
+            $koneksi,
+            "INSERT INTO penggajian (
+            id_karyawan, jabatan, bulan_gaji, gaji_pokok, status, 
+            tanggal_pembayaran, jam_lembur, hadir, alpa, sakit, 
+            bayaran_lembur, total_gaji
+        ) VALUES (
+            '$_POST[id_karyawan]', '$_POST[jabatan]', '$_POST[bulan_gaji]', 
+            '$_POST[gaji_pokok]', '$_POST[status]', '$_POST[tanggal_pembayaran]', 
+            '$_POST[jam_lembur]', '$_POST[hadir]', '$_POST[alpa]', '$_POST[sakit]', 
+            '$_POST[bayaran_lembur]', '$_POST[total_gaji]'
+        )",
+        );
+
+        if ($simpan) {
+            echo "<script>
+                alert('Simpan data sukses!');
+                document.location='gaji.php';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Simpan data Gagal!');
+                document.location='gaji.php';
+            </script>";
+        }
     }
 }
 
@@ -382,6 +419,28 @@ if (isset($_POST['simpan'])) {
                                         <option value="Desember">Desember</option>
                                     </select>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="hadir">Hari Hadir</label>
+                                    <input type="number" name="hadir" id="hadir"
+                                        class="form-control form-control-user col-6" value="0"
+                                        placeholder="Jumlah Hari Hadir" min="0" max="31" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="alpa">Potongan Hari Alpa (per hari): Rp
+                                        50.000</label>
+                                    <input type="number" name="alpa" id="alpa"
+                                        class="form-control form-control-user col-6" value="0"
+                                        placeholder="Jumlah Hari Alfa" min="0" max="31" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="sakit">Potongan Hari Sakit (per hari): Rp
+                                        25.000</label>
+                                    <input type="number" name="sakit" id="sakit"
+                                        class="form-control form-control-user col-6" value="0"
+                                        placeholder="Jumlah Hari Sakit" min="0" max="31" required>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="form-label" for="">Jam Lembur</label>
                                     <input type="number" name="jam_lembur" id="jam_lembur"
@@ -389,7 +448,8 @@ if (isset($_POST['simpan'])) {
                                         min="0">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="">Bayaran Lembur</label>
+                                    <label class="form-label" for="">Bayaran Lembur (per jam): Rp
+                                        30.000</label>
                                     <input type="number" name="bayaran_lembur" id="bayaran_lembur"
                                         class="form-control form-control-user col-6" placeholder="" readonly>
                                 </div>
@@ -479,17 +539,71 @@ if (isset($_POST['simpan'])) {
     <script src="../assets/js/demo/chart-area-demo.js"></script>
     <script src="../assets/js/demo/chart-pie-demo.js"></script>
 
+    <?php
+    // Asumsi parameter pengurangan
+    $potongan_alpa_per_hari = 50000; // Contoh: Rp 50.000 per hari alfa
+    $potongan_sakit_per_hari = 25000; // Contoh: Rp 25.000 per hari sakit
+    
+    function hitungPenguranganGaji($gaji_pokok, $alpa, $sakit)
+    {
+        global $potongan_alpa_per_hari, $potongan_sakit_per_hari;
+    
+        $total_potongan = $alpa * $potongan_alpa_per_hari + $sakit * $potongan_sakit_per_hari;
+    
+        return $total_potongan;
+    }
+    
+    ?>
+
 
 
     <script type="text/javascript">
         const nilai_pajak = <?php echo $nilai_pajak; ?>;
 
-        // Fungsi untuk menghitung gaji lembur (misalnya 1.5x upah per jam)
-        function hitungGajiLembur(jamLembur, gajiPokok) {
-            const jamKerjaSebulan = 160; // Asumsi 160 jam kerja per bulan
+        function calculateTotalSalary() {
+            const gapok = $('#id_karyawan option:selected').data('gaji');
+            const hadir = parseInt($('#hadir').val()) || 0;
+            const alpa = parseInt($('#alpa').val()) || 0;
+            const sakit = parseInt($('#sakit').val()) || 0;
+            const jamLembur = parseFloat($('#jam_lembur').val()) || 0;
+
+            // Hitung potongan pajak
+            const potongan = nilai_pajak / 100;
+            const totalGajiDasar = gapok * (1 - potongan);
+
+            // Hitung potongan absensi
+            const potonganAlpa = alpa * 50000; // Rp 50.000 per hari alfa
+            const potonganSakit = sakit * 25000; // Rp 25.000 per hari sakit
+            const totalPotonganAbsensi = potonganAlpa + potonganSakit;
+
+            // Hitung jam lembur
             const upahPerJam = 30000;
-            return Math.round(jamLembur * upahPerJam);
+            const gajiLembur = Math.round(jamLembur * upahPerJam);
+
+            // Hitung total gaji akhir
+            const totalGaji = Math.round(
+                totalGajiDasar + gajiLembur - totalPotonganAbsensi
+            );
+
+            $('#bayaran_lembur').val(gajiLembur);
+            $('#total_gaji').val(totalGaji);
         }
+
+        // Attach the calculation to multiple input events
+        $('#hadir, #alpa, #sakit, #jam_lembur').on('input', function() {
+            const totalWorkDays =
+                parseInt($('#hadir').val() || 0) +
+                parseInt($('#alpa').val() || 0) +
+                parseInt($('#sakit').val() || 0);
+
+            if (totalWorkDays > 30) {
+                alert('Total hari tidak boleh melebihi 30 hari');
+                $(this).val('');
+                return;
+            }
+
+            calculateTotalSalary();
+        });
 
         $('#id_karyawan').on('change', function() {
             // ambil data dari elemen option yang dipilih
@@ -510,25 +624,6 @@ if (isset($_POST['simpan'])) {
 
             // Inisialisasi total gaji awal tanpa lembur
             $('#total_gaji').val(Math.round(totalGajiDasar));
-        });
-
-        // Event listener untuk input lembur (di luar event change karyawan)
-        $('#jam_lembur').on('input', function() {
-            const gapok = $('#id_karyawan option:selected').data('gaji');
-
-            // Hitung potongan pajak
-            const potongan = nilai_pajak / 100;
-            const totalGajiDasar = gapok * (1 - potongan);
-
-            const jamLembur = parseFloat($(this).val()) || 0;
-            const gajiLembur = hitungGajiLembur(jamLembur, gapok);
-
-            // Tampilkan gaji lembur
-            $('#bayaran_lembur').val(gajiLembur);
-
-            // Hitung total gaji termasuk lembur
-            const totalGaji = Math.round(totalGajiDasar + gajiLembur);
-            $('#total_gaji').val(totalGaji);
         });
     </script>
 

@@ -4,6 +4,8 @@ include '../koneksi.php';
 
 session_start();
 
+$id_karyawan = $_SESSION['id_karyawan'];
+
 if ($_SESSION['status'] != 'login') {
     session_unset();
     session_destroy();
@@ -434,6 +436,9 @@ if (isset($_GET['end_date'])) {
                                             <th>Jabatan</th>
                                             <th>Gaji Pokok</th>
                                             <th>Potongan</th>
+                                            <th>Hadir</th>
+                                            <th>Alpa</th>
+                                            <th>Sakit</th>a
                                             <th>Jam Lembur</th>
                                             <th>Bayaran Lembur</th>
                                             <th>Total Gaji</th>
@@ -452,9 +457,10 @@ if (isset($_GET['end_date'])) {
 
                                     // Query untuk menampilkan data berdasarkan filter tanggal
                                     $query = "SELECT p.*, k.nama FROM penggajian p
-                                            JOIN karyawan k ON p.id_karyawan = k.id";
+                                            JOIN karyawan k ON p.id_karyawan = k.id
+                                            WHERE p.id_karyawan = '$id_karyawan'";
                                     if ($start_date && $end_date) {
-                                        $query .= " WHERE p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
+                                        $query .= " AND p.tanggal_pembayaran BETWEEN '$start_date' AND '$end_date'";
                                     }
 
                                     $tampil = mysqli_query($koneksi, $query);
@@ -474,6 +480,9 @@ if (isset($_GET['end_date'])) {
                                             $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
                                             ?>
                                             <td><?= $nilai_pajak ?>%</td>
+                                            <td><?= $data['hadir'] ?> Hari</td>
+                                            <td><?= $data['alpa'] ?> Hari</td>
+                                            <td><?= $data['sakit'] ?> Hari</td>
                                             <td><?= $data['jam_lembur'] ?> Jam</td>
                                             <td>Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
@@ -484,7 +493,8 @@ if (isset($_GET['end_date'])) {
                                             <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
                                             <?php endif; ?>
                                             <td>
-                                                <a target="_blank" href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>"
+                                                <a target="_blank"
+                                                    href="slip_gaji.php?id=<?= $data['id'] ?>"
                                                     class="btn btn-primary">Slip Gaji</a>
                                             </td>
                                         </tr>

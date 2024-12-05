@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2024 at 08:36 AM
+-- Generation Time: Dec 05, 2024 at 02:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -102,7 +102,10 @@ CREATE TABLE `penggajian` (
   `bayaran_lembur` decimal(10,0) NOT NULL,
   `total_gaji` decimal(10,0) NOT NULL,
   `status` varchar(255) NOT NULL,
-  `tanggal_pembayaran` date NOT NULL
+  `tanggal_pembayaran` date NOT NULL,
+  `hadir` int(20) NOT NULL,
+  `alpa` int(20) NOT NULL,
+  `sakit` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -182,7 +185,7 @@ ALTER TABLE `gaji_detail`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `pajak`
@@ -194,13 +197,13 @@ ALTER TABLE `pajak`
 -- AUTO_INCREMENT for table `pengajuan`
 --
 ALTER TABLE `pengajuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `user`

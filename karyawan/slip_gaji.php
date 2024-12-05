@@ -1,7 +1,9 @@
 <?php
 include '../koneksi.php';
 
-$id_karyawan = $_GET['id_karyawan'];
+session_start();
+
+$id = $_GET['id'];
 
 // Get tax percentage
 $query_pajak = "SELECT pajak FROM pajak ORDER BY id DESC LIMIT 1";
@@ -12,9 +14,9 @@ $persentase_pajak = $pajak['pajak'];
 // Get employee and salary data
 $query = "SELECT p.*, k.nama, k.jabatan, k.departemen FROM penggajian p
           JOIN karyawan k ON p.id_karyawan = k.id
-          WHERE k.id = ?";
+          WHERE p.id = ?";
 $stmt = $koneksi->prepare($query);
-$stmt->bind_param("i", $id_karyawan);
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -195,6 +197,14 @@ if ($result->num_rows > 0) {
                         <span class="info-label">Nama</span>
                         <span class="info-value"><?= htmlspecialchars($data['nama']) ?></span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-label">Hadir</span>
+                        <span class="info-value"><?= $data['hadir'] ?> Hari</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Sakit</span>
+                        <span class="info-value"><?= $data['sakit'] ?> Hari</span>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="info-row">
@@ -204,6 +214,10 @@ if ($result->num_rows > 0) {
                     <div class="info-row">
                         <span class="info-label">Departemen</span>
                         <span class="info-value"><?= htmlspecialchars($data['departemen']) ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Alpa</span>
+                        <span class="info-value"><?= $data['alpa'] ?> Hari</span>
                     </div>
                 </div>
             </div>
@@ -228,6 +242,20 @@ if ($result->num_rows > 0) {
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <?php
+
+                    $potongan_sakit = $data['sakit'] * 25000;
+                    $potongan_alpa = $data['alpa'] * 50000;
+                    $total_potongan = $potongan_sakit + $potongan_alpa;
+                    ?>
+                    <div class="info-row">
+                        <span class="info-label">Potongan Sakit (<?= $data['sakit'] ?> Hari)</span>
+                        <span class="info-value">Rp <?= number_format($potongan_sakit, 0, ',', '.') ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Potongan Alpa (<?= $data['alpa'] ?> Hari)</span>
+                        <span class="info-value">Rp <?= number_format($potongan_alpa, 0, ',', '.') ?></span>
+                    </div>
                     <div class="info-row">
                         <span class="info-label">Potongan Pajak (<?= $persentase_pajak ?>%)</span>
                         <span class="info-value">Rp <?= number_format($potongan_pajak, 0, ',', '.') ?></span>
@@ -235,9 +263,10 @@ if ($result->num_rows > 0) {
                 </div>
             </div>
 
-            <!-- Modify the total calculation to include overtime pay -->
+            <!-- Modify the total calculation to include deductions -->
             <?php
-            $total_gaji = $gaji_bersih + $data['bayaran_lembur'];
+            $gaji_sebelum_potongan = $gaji_bersih + $data['bayaran_lembur'];
+            $total_gaji = $gaji_sebelum_potongan - $total_potongan;
             ?>
             <!-- Total Section -->
             <div class="total-section">

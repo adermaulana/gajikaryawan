@@ -12,12 +12,12 @@ if ($_SESSION['status'] != 'login') {
 }
 
 if (isset($_GET['hal']) == 'hapus') {
-    $hapus = mysqli_query($koneksi, "DELETE FROM karyawan WHERE id = '$_GET[id]'");
+    $hapus = mysqli_query($koneksi, "DELETE FROM pengajuan WHERE id = '$_GET[id]'");
 
     if ($hapus) {
         echo "<script>
                 alert('Hapus data sukses!');
-                document.location='karyawan.php';
+                document.location='pengajuan.php';
                 </script>";
     }
 }
@@ -358,11 +358,16 @@ if (isset($_GET['hal']) == 'hapus') {
                                                         <i class="fas fa-check"></i> Setujui
                                                     </a>
                                                     <a href="proses_tolak.php?id=<?= $data['id'] ?>"
-                                                        class="btn btn-danger btn-sm"
+                                                        class="btn btn-secondary btn-sm"
                                                         onclick="return confirm('Apakah Anda yakin menolak pengajuan ini?')">
                                                         <i class="fas fa-times"></i> Tolak
                                                     </a>
                                                 </div>
+                                                <a href="pengajuan.php?hal=hapus&id=<?= $data['id'] ?>"
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Apakah Anda yakin menghapus pengajuan ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
+                                                </a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
