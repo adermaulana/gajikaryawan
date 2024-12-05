@@ -487,8 +487,8 @@ if (isset($_POST['simpan'])) {
         // Fungsi untuk menghitung gaji lembur (misalnya 1.5x upah per jam)
         function hitungGajiLembur(jamLembur, gajiPokok) {
             const jamKerjaSebulan = 160; // Asumsi 160 jam kerja per bulan
-            const upahPerJam = gajiPokok / jamKerjaSebulan;
-            return Math.round(jamLembur * upahPerJam * 1.5);
+            const upahPerJam = 30000;
+            return Math.round(jamLembur * upahPerJam);
         }
 
         $('#id_karyawan').on('change', function() {
