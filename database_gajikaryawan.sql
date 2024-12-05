@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 04:51 PM
+-- Generation Time: Dec 05, 2024 at 08:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,13 +54,6 @@ CREATE TABLE `karyawan` (
   `tanggal_bergabung` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `karyawan`
---
-
-INSERT INTO `karyawan` (`id`, `nama`, `email`, `username`, `password`, `jabatan`, `departemen`, `gaji_pokok`, `status`, `tanggal_bergabung`) VALUES
-(6, 'udin', 'adermaulana15@gmail.com', 'udin', '6bec9c852847242e384a4d5ac0962ba0', 'Staff', 'Keuangan', 50000000.00, 'aktif', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -93,13 +86,6 @@ CREATE TABLE `pengajuan` (
   `status` enum('pending','diterima','ditolak') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `pengajuan`
---
-
-INSERT INTO `pengajuan` (`id`, `id_karyawan`, `nominal`, `alasan`, `status`) VALUES
-(2, 6, 5000000, 'Saya mau naik gaji', 'ditolak');
-
 -- --------------------------------------------------------
 
 --
@@ -112,17 +98,12 @@ CREATE TABLE `penggajian` (
   `jabatan` varchar(255) NOT NULL,
   `bulan_gaji` varchar(255) NOT NULL,
   `gaji_pokok` decimal(10,0) NOT NULL,
+  `jam_lembur` int(20) NOT NULL,
+  `bayaran_lembur` decimal(10,0) NOT NULL,
   `total_gaji` decimal(10,0) NOT NULL,
   `status` varchar(255) NOT NULL,
   `tanggal_pembayaran` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `penggajian`
---
-
-INSERT INTO `penggajian` (`id`, `id_karyawan`, `jabatan`, `bulan_gaji`, `gaji_pokok`, `total_gaji`, `status`, `tanggal_pembayaran`) VALUES
-(9, 6, 'Staff', 'Januari', 5000000, 4500000, 'Sudah Dibayar', '2024-11-29');
 
 -- --------------------------------------------------------
 
@@ -219,7 +200,7 @@ ALTER TABLE `pengajuan`
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user`

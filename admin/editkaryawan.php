@@ -1,59 +1,61 @@
 <?php
-    include '../koneksi.php';
+include '../koneksi.php';
 
-    session_start();
+session_start();
 
-    // Check login status
-    if($_SESSION['status'] != 'login'){
-        session_unset();
-        session_destroy();
-        header("location:../");
-        exit();
-    }
+// Check login status
+if ($_SESSION['status'] != 'login') {
+    session_unset();
+    session_destroy();
+    header('location:../');
+    exit();
+}
 
-    // Check if an employee ID is provided
-    if(!isset($_GET['id'])) {
-        echo "<script>
+// Check if an employee ID is provided
+if (!isset($_GET['id'])) {
+    echo "<script>
                 alert('ID Karyawan tidak valid!');
                 document.location='karyawan.php';
               </script>";
-        exit();
-    }
+    exit();
+}
 
-    $id = mysqli_real_escape_string($koneksi, $_GET['id']);
+$id = mysqli_real_escape_string($koneksi, $_GET['id']);
 
-    // Fetch current employee data
-    $query = mysqli_query($koneksi, "SELECT * FROM karyawan WHERE id = '$id'");
-    $karyawan = mysqli_fetch_assoc($query);
+// Fetch current employee data
+$query = mysqli_query($koneksi, "SELECT * FROM karyawan WHERE id = '$id'");
+$karyawan = mysqli_fetch_assoc($query);
 
-    if(!$karyawan) {
-        echo "<script>
+if (!$karyawan) {
+    echo "<script>
                 alert('Karyawan tidak ditemukan!');
                 document.location='karyawan.php';
               </script>";
-        exit();
+    exit();
+}
+
+// Process form submission
+if (isset($_POST['update'])) {
+    // Sanitize and validate input
+    $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
+    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
+    $jabatan = mysqli_real_escape_string($koneksi, $_POST['jabatan']);
+    $departemen = mysqli_real_escape_string($koneksi, $_POST['departemen']);
+    $gaji_pokok = mysqli_real_escape_string($koneksi, $_POST['gaji_pokok']);
+    $status = mysqli_real_escape_string($koneksi, $_POST['status']);
+    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
+
+    // Check if password is being changed
+    $password_update = '';
+    if (!empty($_POST['password'])) {
+        $password = md5($_POST['password']);
+        $password_update = ", password = '$password'";
     }
 
-    // Process form submission
-    if(isset($_POST['update'])){
-        // Sanitize and validate input
-        $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
-        $username = mysqli_real_escape_string($koneksi, $_POST['username']);
-        $jabatan = mysqli_real_escape_string($koneksi, $_POST['jabatan']);
-        $departemen = mysqli_real_escape_string($koneksi, $_POST['departemen']);
-        $gaji_pokok = mysqli_real_escape_string($koneksi, $_POST['gaji_pokok']);
-        $status = mysqli_real_escape_string($koneksi, $_POST['status']);
-        $email = mysqli_real_escape_string($koneksi, $_POST['email']);
-
-        // Check if password is being changed
-        $password_update = '';
-        if(!empty($_POST['password'])) {
-            $password = md5($_POST['password']);
-            $password_update = ", password = '$password'";
-        }
-
-        // Update query
-        $update = mysqli_query($koneksi, "UPDATE karyawan 
+    // Update query
+    $update = mysqli_query(
+        $koneksi,
+        "UPDATE karyawan 
                                 SET 
                                 nama = '$nama', 
                                 email = '$email', 
@@ -63,21 +65,24 @@
                                 gaji_pokok = '$gaji_pokok', 
                                 status = '$status'
                                 $password_update
-                                WHERE id = '$id'");
-        
-        if($update){
-            echo "<script>
+                                WHERE id = '$id'",
+    );
+
+    if ($update) {
+        echo "<script>
                     alert('Update data sukses!');
                     document.location='karyawan.php';
                   </script>";
-        } else {
-            echo "<script>
-                    alert('Update data gagal: " . mysqli_error($koneksi) . "');
+    } else {
+        echo "<script>
+                    alert('Update data gagal: " .
+            mysqli_error($koneksi) .
+            "');
                     document.location='editkaryawan.php?id=$id';
                   </script>";
-        }
-        exit();
     }
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -100,80 +105,82 @@
     <!-- Custom styles for this template-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
     <style>
-  /* Modern, clean, and engaging design */
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
-    height: 100%;
-    color: #4a4a4a;
-  }
+        /* Modern, clean, and engaging design */
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+            height: 100%;
+            color: #4a4a4a;
+        }
 
-  .sidebar {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: #ffffff;
-  }
+        .sidebar {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+        }
 
-  .sidebar .nav-item .nav-link {
-    color: #ffffff;
-    font-weight: 500;
-    transition: all 0.3s ease-in-out;
-  }
+        .sidebar .nav-item .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
 
-  .sidebar .nav-item.active .nav-link,
-  .sidebar .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-  }
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #4a4a4a;
+            font-weight: 600;
+        }
 
-  .card {
-    border: none;
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
+        .card {
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
 
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-  }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
 
-  .card-icon {
-    font-size: 2.5rem;
-    color: rgba(50, 115, 220, 0.8);
-  }
+        .card-icon {
+            font-size: 2.5rem;
+            color: rgba(50, 115, 220, 0.8);
+        }
 
-  .badge {
-    padding: 8px 14px;
-    border-radius: 12px;
-  }
+        .badge {
+            padding: 8px 14px;
+            border-radius: 12px;
+        }
 
-  .badge-danger {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
-  }
+        .badge-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
 
-  .badge-success {
-    background: linear-gradient(135deg, #42e695, #3bb2b8);
-    color: #fff;
-  }
-  </style>
+        .badge-success {
+            background: linear-gradient(135deg, #42e695, #3bb2b8);
+            color: #fff;
+        }
+    </style>
 
 </head>
 
@@ -242,7 +249,7 @@
                 </div>
             </li>
 
-                        <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -254,17 +261,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="laporan.php">Laporan</a>
                     </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-file-alt"></i>
-                <span>Pengaturan Pajak</span>
-                </a>
-                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
-                </div>
                 </div>
             </li>
             <!-- Divider -->
@@ -344,15 +340,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="../assets/img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
+                                <img class="img-profile rounded-circle" src="../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -373,51 +370,67 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="karyawan.php" class="btn btn-success btn-icon-split">
-                                        <span class="text">Kembali</span>
-                                    </a>
+                            <a href="karyawan.php" class="btn btn-success btn-icon-split">
+                                <span class="text">Kembali</span>
+                            </a>
                         </div>
                         <div class="card-body">
-                        <form method="post" class="user">
+                            <form method="post" class="user">
                                 <div class="form-group">
                                     <input type="text" name="nama" class="form-control form-control-user col-6"
-                                        placeholder="Nama" value="<?= htmlspecialchars($karyawan['nama']) ?>" required>
+                                        placeholder="Nama" value="<?= htmlspecialchars($karyawan['nama']) ?>"
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="email" class="form-control form-control-user col-6"
-                                        placeholder="Email" value="<?= htmlspecialchars($karyawan['email']) ?>" required>
+                                        placeholder="Email" value="<?= htmlspecialchars($karyawan['email']) ?>"
+                                        required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="username" class="form-control form-control-user col-6"
-                                        placeholder="Username" value="<?= htmlspecialchars($karyawan['username']) ?>" required>
+                                    <input type="text" name="username"
+                                        class="form-control form-control-user col-6" placeholder="Username"
+                                        value="<?= htmlspecialchars($karyawan['username']) ?>" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="password" class="form-control form-control-user col-6"
+                                    <input type="password" name="password"
+                                        class="form-control form-control-user col-6"
                                         placeholder="Password (kosongkan jika tidak ingin mengubah)">
                                 </div>
-                                <div class="form-group"> 
+                                <div class="form-group">
                                     <select name="jabatan" class="form-control col-6" required>
-                                        <option value="Manager" <?= $karyawan['jabatan'] == 'Manager' ? 'selected' : '' ?>>Manager</option>
-                                        <option value="Staff" <?= $karyawan['jabatan'] == 'Staff' ? 'selected' : '' ?>>Staff</option>
-                                        <option value="Supervisor" <?= $karyawan['jabatan'] == 'Supervisor' ? 'selected' : '' ?>>Supervisor</option>
-                                        <option value="Intern" <?= $karyawan['jabatan'] == 'Intern' ? 'selected' : '' ?>>Intern</option>
+                                        <option value="Manager"
+                                            <?= $karyawan['jabatan'] == 'Manager' ? 'selected' : '' ?>>Manager</option>
+                                        <option value="Staff"
+                                            <?= $karyawan['jabatan'] == 'Staff' ? 'selected' : '' ?>>Staff</option>
+                                        <option value="Supervisor"
+                                            <?= $karyawan['jabatan'] == 'Supervisor' ? 'selected' : '' ?>>Supervisor
+                                        </option>
+                                        <option value="Intern"
+                                            <?= $karyawan['jabatan'] == 'Intern' ? 'selected' : '' ?>>Intern</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <select name="departemen" class="form-control col-6" required>
-                                        <option value="Keuangan" <?= $karyawan['departemen'] == 'Keuangan' ? 'selected' : '' ?>>Keuangan</option>
-                                        <option value="Sales" <?= $karyawan['departemen'] == 'Sales' ? 'selected' : '' ?>>Sales</option>
+                                        <option value="Keuangan"
+                                            <?= $karyawan['departemen'] == 'Keuangan' ? 'selected' : '' ?>>Keuangan
+                                        </option>
+                                        <option value="Sales"
+                                            <?= $karyawan['departemen'] == 'Sales' ? 'selected' : '' ?>>Sales</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <select name="status" class="form-control col-6" required>
-                                        <option value="Aktif" <?= $karyawan['status'] == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
-                                        <option value="Tidak Aktif" <?= $karyawan['status'] == 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
+                                        <option value="Aktif" <?= $karyawan['status'] == 'Aktif' ? 'selected' : '' ?>>
+                                            Aktif</option>
+                                        <option value="Tidak Aktif"
+                                            <?= $karyawan['status'] == 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="gaji_pokok" class="form-control form-control-user col-6"
-                                        placeholder="Gaji Pokok" value="<?= htmlspecialchars($karyawan['gaji_pokok']) ?>" required>
+                                    <input type="text" name="gaji_pokok"
+                                        class="form-control form-control-user col-6" placeholder="Gaji Pokok"
+                                        value="<?= htmlspecialchars($karyawan['gaji_pokok']) ?>" required>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" name="update" class="btn btn-primary btn-icon-split">

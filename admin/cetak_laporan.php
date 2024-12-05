@@ -16,34 +16,40 @@ $result = mysqli_query($koneksi, $query);
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Laporan Penggajian</title>
     <style>
         /* CSS untuk laporan */
         @media print {
+
             /* Menyembunyikan tombol print pada hasil cetakan */
             .no-print {
                 display: none;
             }
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
         }
-        
+
         /* Format mata uang */
         .currency {
             text-align: right;
@@ -56,6 +62,7 @@ $result = mysqli_query($koneksi, $query);
         }
     </script>
 </head>
+
 <body>
     <div class="header">
         <h2>Laporan Penggajian Karyawan</h2>
@@ -72,6 +79,8 @@ $result = mysqli_query($koneksi, $query);
                 <th>Jabatan</th>
                 <th>Gaji Pokok</th>
                 <th>Potongan</th>
+                <th>Jam Lembur</th>
+                <th>Bayaran Lembur</th>
                 <th>Total Gaji</th>
                 <th>Tanggal Pembayaran</th>
                 <th>Status</th>
@@ -90,12 +99,14 @@ $result = mysqli_query($koneksi, $query);
                 <td><?= $data['jabatan'] ?></td>
                 <td class="currency">Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
                 <?php
-                                        // Query untuk mengambil nilai pajak
-                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
-                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                                        ?> 
-                                        <td><?= $nilai_pajak ?>%</td> 
+                // Query untuk mengambil nilai pajak
+                $query_pajak = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
+                $data_pajak = mysqli_fetch_assoc($query_pajak);
+                $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                ?>
+                <td><?= $nilai_pajak ?>%</td>
+                <td><?= $data['jam_lembur'] ?> Jam</td>
+                <td class="currency">Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
                 <td class="currency">Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
                 <td><?= date('d/m/Y', strtotime($data['tanggal_pembayaran'])) ?></td>
                 <td><?= $data['status'] ?></td>
@@ -111,4 +122,5 @@ $result = mysqli_query($koneksi, $query);
     </table>
 
 </body>
+
 </html>

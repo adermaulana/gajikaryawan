@@ -1,33 +1,31 @@
 <?php
 
-    include '../koneksi.php';
+include '../koneksi.php';
 
-    session_start();
+session_start();
 
-        if($_SESSION['status'] != 'login'){
-        
-            session_unset();
-            session_destroy();
-        
-            header("location:../");
-        
-        }
+if ($_SESSION['status'] != 'login') {
+    session_unset();
+    session_destroy();
 
-        if(isset($_POST['simpan'])){
-            $simpan = mysqli_query($koneksi, "INSERT INTO penggajian (id_karyawan, jabatan,bulan_gaji, gaji_pokok, status, tanggal_pembayaran,total_gaji) VALUES ('$_POST[id_karyawan]','$_POST[jabatan]','$_POST[bulan_gaji]','$_POST[gaji_pokok]','$_POST[status]','$_POST[tanggal_pembayaran]','$_POST[total_gaji]')");
-        
-            if($simpan){
-                echo "<script>
+    header('location:../');
+}
+
+if (isset($_POST['simpan'])) {
+    $simpan = mysqli_query($koneksi, "INSERT INTO penggajian (id_karyawan, jabatan,bulan_gaji, gaji_pokok, status, tanggal_pembayaran,jam_lembur,bayaran_lembur,total_gaji) VALUES ('$_POST[id_karyawan]','$_POST[jabatan]','$_POST[bulan_gaji]','$_POST[gaji_pokok]','$_POST[status]','$_POST[tanggal_pembayaran]','$_POST[jam_lembur]','$_POST[bayaran_lembur]','$_POST[total_gaji]')");
+
+    if ($simpan) {
+        echo "<script>
                         alert('Simpan data sukses!');
                         document.location='gaji.php';
                     </script>";
-            } else {
-                echo "<script>
+    } else {
+        echo "<script>
                         alert('Simpan data Gagal!');
                         document.location='gaji.php';
                     </script>";
-            }
-        }
+    }
+}
 
 ?>
 
@@ -52,80 +50,82 @@
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
     <style>
-  /* Modern, clean, and engaging design */
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
-    height: 100%;
-    color: #4a4a4a;
-  }
+        /* Modern, clean, and engaging design */
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+            height: 100%;
+            color: #4a4a4a;
+        }
 
-  .sidebar {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: #ffffff;
-  }
+        .sidebar {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+        }
 
-  .sidebar .nav-item .nav-link {
-    color: #ffffff;
-    font-weight: 500;
-    transition: all 0.3s ease-in-out;
-  }
+        .sidebar .nav-item .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
 
-  .sidebar .nav-item.active .nav-link,
-  .sidebar .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-  }
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #4a4a4a;
+            font-weight: 600;
+        }
 
-  .card {
-    border: none;
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
+        .card {
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
 
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-  }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
 
-  .card-icon {
-    font-size: 2.5rem;
-    color: rgba(50, 115, 220, 0.8);
-  }
+        .card-icon {
+            font-size: 2.5rem;
+            color: rgba(50, 115, 220, 0.8);
+        }
 
-  .badge {
-    padding: 8px 14px;
-    border-radius: 12px;
-  }
+        .badge {
+            padding: 8px 14px;
+            border-radius: 12px;
+        }
 
-  .badge-danger {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
-  }
+        .badge-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
 
-  .badge-success {
-    background: linear-gradient(135deg, #42e695, #3bb2b8);
-    color: #fff;
-  }
-  </style>
+        .badge-success {
+            background: linear-gradient(135deg, #42e695, #3bb2b8);
+            color: #fff;
+        }
+    </style>
 
 </head>
 
@@ -194,7 +194,7 @@
                 </div>
             </li>
 
-                        <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -208,17 +208,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-file-alt"></i>
-                <span>Pengaturan Pajak</span>
-                </a>
-                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
-                </div>
-                </div>
-            </li>
+
             <!-- Divider -->
 
             <li class="nav-item">
@@ -227,8 +217,7 @@
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -296,15 +285,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="../assets/img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
+                                <img class="img-profile rounded-circle" src="../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -325,88 +315,103 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="karyawan.php" class="btn btn-success btn-icon-split">
-                                        <span class="text">Kembali</span>
-                                    </a>
+                            <a href="karyawan.php" class="btn btn-success btn-icon-split">
+                                <span class="text">Kembali</span>
+                            </a>
                         </div>
                         <div class="card-body">
-                        <form method="post" class="user" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control form-control-user col-6"
-                                     readonly>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="id_karyawan" id="id_karyawan"  class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Karyawan</option>
-                                    <?php
+                            <form method="post" class="user" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran"
+                                        class="form-control form-control-user col-6" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <select name="id_karyawan" id="id_karyawan" class="form-control col-6" required>
+                                        <option value="" disabled selected>Pilih Karyawan</option>
+                                        <?php
                                         $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
                                         while($data = mysqli_fetch_array($tampil)):
                                     ?>
-                                    <option value="<?= $data['id'] ?>" data-gaji="<?= $data["gaji_pokok"] ?>" data-jabatan="<?= $data["jabatan"] ?>"  ><?= $data['nama'] ?></option>
-                                    <?php
+                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji_pokok'] ?>"
+                                            data-jabatan="<?= $data['jabatan'] ?>"><?= $data['nama'] ?></option>
+                                        <?php
                                         endwhile; 
                                     ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="jabatan" class="form-control form-control-user col-6"
-                                    placeholder="Jabatan"  readonly>
-                            </div>
-                            <div class="form-group">
-                                <input type="number" name="gaji_pokok" class="form-control form-control-user col-6"
-                                    placeholder="Gaji Pokok" readonly>
-                            </div>
-                            <!-- <div class="form-group">
-                                <input type="number" name="tunjangan" class="form-control form-control-user col-6"
-                                    placeholder="Tunjangan" readonly>
-                            </div> -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="jabatan" class="form-control form-control-user col-6"
+                                        placeholder="Jabatan" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" name="gaji_pokok"
+                                        class="form-control form-control-user col-6" placeholder="Gaji Pokok"
+                                        readonly>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <input type="number" name="tunjangan" class="form-control form-control-user col-6"
+                                        placeholder="Tunjangan" readonly>
+                                </div> -->
 
-                            <?php
-                            // Query untuk mengambil nilai pajak
-                            $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-                            $data_pajak = mysqli_fetch_assoc($query_pajak);
-                            $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                            ?>
+                                <?php
+                                // Query untuk mengambil nilai pajak
+                                $query_pajak = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
+                                $data_pajak = mysqli_fetch_assoc($query_pajak);
+                                $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                                ?>
 
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-user col-6"
-                                    placeholder="Potongan" value="<?= $nilai_pajak ?> Persen (<?= $nilai_pajak ?>%)" readonly>
-                            </div>
-                            <div class="form-group">
-                                <input type="number" id="total_gaji" name="total_gaji" class="form-control form-control-user col-6"
-                                    placeholder="Total Gaji" readonly>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="bulan_gaji" class="form-control col-6" required>
-                                    <option value="" disabled selected>Pilih Bulan</option>
-                                    <option value="Januari">Januari</option>
-                                    <option value="Februari">Februari</option>
-                                    <option value="Maret">Maret</option>
-                                    <option value="April">April</option>
-                                    <option value="Mei">Mei</option>
-                                    <option value="Juni">Juni</option>
-                                    <option value="Juli">Juli</option>
-                                    <option value="Agustus">Agustus</option>
-                                    <option value="September">September</option>
-                                    <option value="Oktober">Oktober</option>
-                                    <option value="November">November</option>
-                                    <option value="Desember">Desember</option>
-                                </select>
-                            </div>
-                            <div class="form-group"> 
-                                <select name="status" class="form-control col-6" required>
-                                    <option value="" disabled selected>Status</option>
-                                    <option value="Belum Dibayar">Belum Dibayar</option>
-                                    <option value="Sudah Dibayar">Sudah Dibayar</option>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user col-6"
+                                        placeholder="Potongan"
+                                        value="<?= $nilai_pajak ?> Persen (<?= $nilai_pajak ?>%)" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <select name="bulan_gaji" class="form-control col-6" required>
+                                        <option value="" disabled selected>Pilih Bulan Gaji</option>
+                                        <option value="Januari">Januari</option>
+                                        <option value="Februari">Februari</option>
+                                        <option value="Maret">Maret</option>
+                                        <option value="April">April</option>
+                                        <option value="Mei">Mei</option>
+                                        <option value="Juni">Juni</option>
+                                        <option value="Juli">Juli</option>
+                                        <option value="Agustus">Agustus</option>
+                                        <option value="September">September</option>
+                                        <option value="Oktober">Oktober</option>
+                                        <option value="November">November</option>
+                                        <option value="Desember">Desember</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="">Jam Lembur</label>
+                                    <input type="number" name="jam_lembur" id="jam_lembur"
+                                        class="form-control form-control-user col-6" placeholder="Jam Lembur"
+                                        min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="">Bayaran Lembur</label>
+                                    <input type="number" name="bayaran_lembur" id="bayaran_lembur"
+                                        class="form-control form-control-user col-6" placeholder="" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="total_gaji" name="total_gaji"
+                                        class="form-control form-control-user col-6" placeholder="Total Gaji"
+                                        readonly>
+                                </div>
+                                <div class="form-group">
+                                    <select name="status" class="form-control col-6" required>
+                                        <option value="" disabled selected>Status</option>
+                                        <option value="Belum Dibayar">Belum Dibayar</option>
+                                        <option value="Sudah Dibayar">Sudah Dibayar</option>
 
-                                </select>
-                            </div>
-                            <div class="form-group">
-                            <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
-                                <span class="text">Simpan</span>
-                            </button>
-                            </div>
-                        </form>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
+                                        <span class="text">Simpan</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -477,25 +482,54 @@
 
 
     <script type="text/javascript">
+        const nilai_pajak = <?php echo $nilai_pajak; ?>;
 
-    const nilai_pajak = <?php echo $nilai_pajak; ?>;
+        // Fungsi untuk menghitung gaji lembur (misalnya 1.5x upah per jam)
+        function hitungGajiLembur(jamLembur, gajiPokok) {
+            const jamKerjaSebulan = 160; // Asumsi 160 jam kerja per bulan
+            const upahPerJam = gajiPokok / jamKerjaSebulan;
+            return Math.round(jamLembur * upahPerJam * 1.5);
+        }
 
-    $('#id_karyawan').on('change', function(){
-    // ambil data dari elemen option yang dipilih
-    const gapok = $('#id_karyawan option:selected').data('gaji');
-    const jabatan = $('#id_karyawan option:selected').data('jabatan');
-    
-    // kalkulasi total harga
-    
-    // tampilkan data ke element
-    $('[name=jabatan]').val(`${jabatan}`);
-    $('[name=gaji_pokok]').val(`${gapok}`);
+        $('#id_karyawan').on('change', function() {
+            // ambil data dari elemen option yang dipilih
+            const gapok = $('#id_karyawan option:selected').data('gaji');
+            const jabatan = $('#id_karyawan option:selected').data('jabatan');
 
-    const potongan = nilai_pajak / 100; // Konversi persen ke desimal
-    const totalGaji = gapok * (1 - potongan); // Total gaji setelah potongan
-    $('#total_gaji').val(Math.round(totalGaji)); // Bulatkan ke angka terdekat
-    });
+            // tampilkan data ke element
+            $('[name=jabatan]').val(`${jabatan}`);
+            $('[name=gaji_pokok]').val(`${gapok}`);
 
+            // Hitung total gaji dasar setelah pajak
+            const potongan = nilai_pajak / 100; // Konversi persen ke desimal
+            const totalGajiDasar = gapok * (1 - potongan); // Total gaji setelah potongan
+
+            // Reset jam lembur dan bayaran lembur
+            $('#jam_lembur').val(0);
+            $('#bayaran_lembur').val(0);
+
+            // Inisialisasi total gaji awal tanpa lembur
+            $('#total_gaji').val(Math.round(totalGajiDasar));
+        });
+
+        // Event listener untuk input lembur (di luar event change karyawan)
+        $('#jam_lembur').on('input', function() {
+            const gapok = $('#id_karyawan option:selected').data('gaji');
+
+            // Hitung potongan pajak
+            const potongan = nilai_pajak / 100;
+            const totalGajiDasar = gapok * (1 - potongan);
+
+            const jamLembur = parseFloat($(this).val()) || 0;
+            const gajiLembur = hitungGajiLembur(jamLembur, gapok);
+
+            // Tampilkan gaji lembur
+            $('#bayaran_lembur').val(gajiLembur);
+
+            // Hitung total gaji termasuk lembur
+            const totalGaji = Math.round(totalGajiDasar + gajiLembur);
+            $('#total_gaji').val(totalGaji);
+        });
     </script>
 
     <script>

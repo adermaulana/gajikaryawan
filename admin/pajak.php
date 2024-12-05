@@ -1,72 +1,70 @@
 <?php
 
-    include '../koneksi.php';
+include '../koneksi.php';
 
-    session_start();
+session_start();
 
-        if($_SESSION['status'] != 'login'){
-        
-            session_unset();
-            session_destroy();
-        
-            header("location:../");
-        
-        }
+if ($_SESSION['status'] != 'login') {
+    session_unset();
+    session_destroy();
 
-        if(isset($_POST['simpan'])) {
-            $pajak = mysqli_real_escape_string($koneksi, $_POST['pajak']);
-            
-            // Validasi input tidak boleh kosong
-            if(empty($pajak)) {
-                echo "<script>
+    header('location:../');
+}
+
+if (isset($_POST['simpan'])) {
+    $pajak = mysqli_real_escape_string($koneksi, $_POST['pajak']);
+
+    // Validasi input tidak boleh kosong
+    if (empty($pajak)) {
+        echo "<script>
                         alert('Data pajak tidak boleh kosong!');
                         document.location='pajak.php';
                     </script>";
-                exit;
-            }
-            
-            // Cek apakah data pajak sudah ada berdasarkan ID
-            $cek_pajak = mysqli_query($koneksi, "SELECT id FROM pajak LIMIT 1");
-            
-            if(mysqli_num_rows($cek_pajak) > 0) {
-                // Ambil ID pajak yang ada
-                $row = mysqli_fetch_assoc($cek_pajak);
-                $id_pajak = $row['id'];
-                
-                // Jika data sudah ada, lakukan update berdasarkan ID
-                $update = mysqli_query($koneksi, "UPDATE pajak SET pajak = '$pajak' WHERE id = $id_pajak");
-                
-                if($update) {
-                    echo "<script>
+        exit();
+    }
+
+    // Cek apakah data pajak sudah ada berdasarkan ID
+    $cek_pajak = mysqli_query($koneksi, 'SELECT id FROM pajak LIMIT 1');
+
+    if (mysqli_num_rows($cek_pajak) > 0) {
+        // Ambil ID pajak yang ada
+        $row = mysqli_fetch_assoc($cek_pajak);
+        $id_pajak = $row['id'];
+
+        // Jika data sudah ada, lakukan update berdasarkan ID
+        $update = mysqli_query($koneksi, "UPDATE pajak SET pajak = '$pajak' WHERE id = $id_pajak");
+
+        if ($update) {
+            echo "<script>
                             alert('Update data sukses!');
                             document.location='pajak.php';
                         </script>";
-                } else {
-                    echo "<script>
+        } else {
+            echo "<script>
                             alert('Update data Gagal!');
                             document.location='pajak.php';
                         </script>";
-                }
-            } else {
-                // Jika data belum ada sama sekali, lakukan insert
-                $simpan = mysqli_query($koneksi, "INSERT INTO pajak (pajak) VALUES ('$pajak')");
-            
-                if($simpan) {
-                    echo "<script>
+        }
+    } else {
+        // Jika data belum ada sama sekali, lakukan insert
+        $simpan = mysqli_query($koneksi, "INSERT INTO pajak (pajak) VALUES ('$pajak')");
+
+        if ($simpan) {
+            echo "<script>
                             alert('Simpan data sukses!');
                             document.location='pajak.php';
                         </script>";
-                } else {
-                    echo "<script>
+        } else {
+            echo "<script>
                             alert('Simpan data Gagal!');
                             document.location='pajak.php';
                         </script>";
-                }
-            }
         }
+    }
+}
 
-        $query = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-        $data = mysqli_fetch_assoc($query);
+$query = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
+$data = mysqli_fetch_assoc($query);
 
 ?>
 
@@ -91,80 +89,82 @@
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
     <style>
-  /* Modern, clean, and engaging design */
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
-    height: 100%;
-    color: #4a4a4a;
-  }
+        /* Modern, clean, and engaging design */
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+            height: 100%;
+            color: #4a4a4a;
+        }
 
-  .sidebar {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: #ffffff;
-  }
+        .sidebar {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+        }
 
-  .sidebar .nav-item .nav-link {
-    color: #ffffff;
-    font-weight: 500;
-    transition: all 0.3s ease-in-out;
-  }
+        .sidebar .nav-item .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
 
-  .sidebar .nav-item.active .nav-link,
-  .sidebar .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-  }
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #4a4a4a;
+            font-weight: 600;
+        }
 
-  .card {
-    border: none;
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
+        .card {
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
 
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-  }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
 
-  .card-icon {
-    font-size: 2.5rem;
-    color: rgba(50, 115, 220, 0.8);
-  }
+        .card-icon {
+            font-size: 2.5rem;
+            color: rgba(50, 115, 220, 0.8);
+        }
 
-  .badge {
-    padding: 8px 14px;
-    border-radius: 12px;
-  }
+        .badge {
+            padding: 8px 14px;
+            border-radius: 12px;
+        }
 
-  .badge-danger {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
-  }
+        .badge-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
 
-  .badge-success {
-    background: linear-gradient(135deg, #42e695, #3bb2b8);
-    color: #fff;
-  }
-  </style>
+        .badge-success {
+            background: linear-gradient(135deg, #42e695, #3bb2b8);
+            color: #fff;
+        }
+    </style>
 
 </head>
 
@@ -233,7 +233,7 @@
                 </div>
             </li>
 
-                        <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -247,17 +247,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-file-alt"></i>
-                <span>Pengaturan Pajak</span>
-                </a>
-                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
-                </div>
-                </div>
-            </li>
+
             <!-- Divider -->
 
             <li class="nav-item">
@@ -335,15 +325,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="../assets/img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
+                                <img class="img-profile rounded-circle" src="../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -364,23 +355,23 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="karyawan.php" class="btn btn-success btn-icon-split">
-                                        <span class="text">Kembali</span>
-                                    </a>
+                            <a href="karyawan.php" class="btn btn-success btn-icon-split">
+                                <span class="text">Kembali</span>
+                            </a>
                         </div>
                         <div class="card-body">
-                        <form method="post" class="user" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="">Pajak(%)</label>
-                                <input type="text" name="pajak" value="<?= $data['pajak'] ?>" class="form-control form-control-user col-6"
-                                    placeholder="Pajak">
-                            </div>
-                            <div class="form-group">
-                            <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
-                                <span class="text">Simpan</span>
-                            </button>
-                            </div>
-                        </form>
+                            <form method="post" class="user" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="">Pajak(%)</label>
+                                    <input type="text" name="pajak" value="<?= $data['pajak'] ?>"
+                                        class="form-control form-control-user col-6" placeholder="Pajak">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
+                                        <span class="text">Simpan</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -451,24 +442,22 @@
 
 
     <script type="text/javascript">
+        $('#id_karyawan').on('change', function() {
+            // ambil data dari elemen option yang dipilih
+            const gapok = $('#id_karyawan option:selected').data('gaji');
+            const jabatan = $('#id_karyawan option:selected').data('jabatan');
 
-    $('#id_karyawan').on('change', function(){
-    // ambil data dari elemen option yang dipilih
-    const gapok = $('#id_karyawan option:selected').data('gaji');
-    const jabatan = $('#id_karyawan option:selected').data('jabatan');
-    
-    // kalkulasi total harga
-    
-    // tampilkan data ke element
-    $('[name=jabatan]').val(`${jabatan}`);
-    $('[name=gaji_pokok]').val(`${gapok}`);
+            // kalkulasi total harga
 
-    const potongan = 0.1; // 10% potongan
-    const totalGaji = gapok * (1 - potongan); // Total gaji setelah potongan
-    $('#total_gaji').val(totalGaji.toFixed(2)); // Format to 2 decimal places
-    
-    });
+            // tampilkan data ke element
+            $('[name=jabatan]').val(`${jabatan}`);
+            $('[name=gaji_pokok]').val(`${gapok}`);
 
+            const potongan = 0.1; // 10% potongan
+            const totalGaji = gapok * (1 - potongan); // Total gaji setelah potongan
+            $('#total_gaji').val(totalGaji.toFixed(2)); // Format to 2 decimal places
+
+        });
     </script>
 
     <script>

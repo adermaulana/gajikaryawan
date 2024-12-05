@@ -1,29 +1,26 @@
 <?php
 
-    include '../koneksi.php';
+include '../koneksi.php';
 
-    session_start();
+session_start();
 
-        if($_SESSION['status'] != 'login'){
-        
-            session_unset();
-            session_destroy();
-        
-            header("location:../");
-        
-        }
+if ($_SESSION['status'] != 'login') {
+    session_unset();
+    session_destroy();
 
-        $start_date = '';
-        $end_date = '';
-        
-        // Ambil nilai filter tanggal dari $_GET jika ada
-        if(isset($_GET['start_date'])) {
-            $start_date = $_GET['start_date'];
-        }
-        if(isset($_GET['end_date'])) {
-            $end_date = $_GET['end_date'];
-        }
+    header('location:../');
+}
 
+$start_date = '';
+$end_date = '';
+
+// Ambil nilai filter tanggal dari $_GET jika ada
+if (isset($_GET['start_date'])) {
+    $start_date = $_GET['start_date'];
+}
+if (isset($_GET['end_date'])) {
+    $end_date = $_GET['end_date'];
+}
 
 ?>
 
@@ -48,80 +45,82 @@
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
     <style>
-  /* Modern, clean, and engaging design */
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
-    height: 100%;
-    color: #4a4a4a;
-  }
+        /* Modern, clean, and engaging design */
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+            height: 100%;
+            color: #4a4a4a;
+        }
 
-  .sidebar {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: #ffffff;
-  }
+        .sidebar {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+        }
 
-  .sidebar .nav-item .nav-link {
-    color: #ffffff;
-    font-weight: 500;
-    transition: all 0.3s ease-in-out;
-  }
+        .sidebar .nav-item .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
 
-  .sidebar .nav-item.active .nav-link,
-  .sidebar .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-  }
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #4a4a4a;
+            font-weight: 600;
+        }
 
-  .card {
-    border: none;
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
+        .card {
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
 
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-  }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
 
-  .card-icon {
-    font-size: 2.5rem;
-    color: rgba(50, 115, 220, 0.8);
-  }
+        .card-icon {
+            font-size: 2.5rem;
+            color: rgba(50, 115, 220, 0.8);
+        }
 
-  .badge {
-    padding: 8px 14px;
-    border-radius: 12px;
-  }
+        .badge {
+            padding: 8px 14px;
+            border-radius: 12px;
+        }
 
-  .badge-danger {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
-  }
+        .badge-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
 
-  .badge-success {
-    background: linear-gradient(135deg, #42e695, #3bb2b8);
-    color: #fff;
-  }
-  </style>
+        .badge-success {
+            background: linear-gradient(135deg, #42e695, #3bb2b8);
+            color: #fff;
+        }
+    </style>
 
 </head>
 
@@ -159,7 +158,7 @@
                 Fitur
             </div>
 
-                        <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -180,8 +179,7 @@
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Buat Ajuan Gaji</a>
                     </div>
@@ -264,7 +262,8 @@
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                        <span class="font-weight-bold">A new monthly report is ready to
+                                            download!</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -289,7 +288,8 @@
                                         Spending Alert: We've noticed unusually high spending for your account.
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                                    Alerts</a>
                             </div>
                         </li>
 
@@ -309,8 +309,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -321,8 +320,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -333,20 +331,20 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                                        <div class="text-truncate">Last month's report looks great, I am very happy
+                                            with
                                             the progress so far, keep up the good work!</div>
                                         <div class="small text-gray-500">Morgan Alvarez · 2d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
+                                        <img class="rounded-circle"
+                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
@@ -355,7 +353,8 @@
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More
+                                    Messages</a>
                             </div>
                         </li>
 
@@ -365,15 +364,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_karyawan'] ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="../assets/img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_karyawan'] ?></span>
+                                <img class="img-profile rounded-circle" src="../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -389,56 +389,61 @@
 
                 <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Laporan Gaji</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Laporan Gaji</h1>
 
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <!-- Form untuk filter tanggal -->
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="start_date">Tanggal Awal:</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <!-- Form untuk filter tanggal -->
+                            <form method="GET" action="">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="start_date">Tanggal Awal:</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control"
+                                            value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="end_date">Tanggal Akhir:</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control"
+                                            value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>&nbsp;</label>
+                                        <a href="cetak_laporan.php<?= $start_date && $end_date ? "?start_date=$start_date&end_date=$end_date"
+                                            : '' ?>"
+                                            class="btn btn-success btn-block" target="_blank">
+                                            <i class="fas fa-print mr-2"></i>Cetak Laporan
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="end_date">Tanggal Akhir:</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
-                                </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                                </div>
-                                <div class="col-md-2">
-                                <label>&nbsp;</label>
-                                <a href="cetak_laporan.php<?= ($start_date && $end_date) ? "?start_date=$start_date&end_date=$end_date" : "" ?>" 
-                                class="btn btn-success btn-block" target="_blank">
-                                    <i class="fas fa-print mr-2"></i>Cetak Laporan
-                                </a>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
 
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Jabatan</th>
-                                        <th>Gaji Pokok</th>
-                                        <th>Potongan</th>
-                                        <th>Total Gaji</th>
-                                        <th>Tanggal Pembayaran</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama</th>
+                                            <th>Jabatan</th>
+                                            <th>Gaji Pokok</th>
+                                            <th>Potongan</th>
+                                            <th>Jam Lembur</th>
+                                            <th>Bayaran Lembur</th>
+                                            <th>Total Gaji</th>
+                                            <th>Tanggal Pembayaran</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
                                     $no = 1;
                                     
                                     // Ambil nilai filter tanggal
@@ -457,35 +462,38 @@
                                     // Tampilkan data
                                     while ($data = mysqli_fetch_array($tampil)) :
                                     ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= $data['nama'] ?></td>
-                                        <td><?= $data['jabatan'] ?></td>
-                                        <td><?= $data['gaji_pokok'] ?></td>
-                                        <?php
-                                        // Query untuk mengambil nilai pajak
-                                        $query_pajak = mysqli_query($koneksi, "SELECT * FROM pajak LIMIT 1");
-                                        $data_pajak = mysqli_fetch_assoc($query_pajak);
-                                        $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                                        ?> 
-                                        <td><?= $nilai_pajak ?>%</td> 
-                                        <td><?= $data['total_gaji'] ?></td>
-                                        <td><?= $data['tanggal_pembayaran'] ?></td>
-                                        <?php if ($data['status'] == 'Sudah Dibayar'): ?>
-                                        <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
-                                        <?php else: ?>
-                                        <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
-                                        <?php endif; ?> 
-                                        <td>
-                                            <a href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>" class="btn btn-primary">Slip Gaji</a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><?= $data['nama'] ?></td>
+                                            <td><?= $data['jabatan'] ?></td>
+                                            <td>Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
+                                            <?php
+                                            // Query untuk mengambil nilai pajak
+                                            $query_pajak = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
+                                            $data_pajak = mysqli_fetch_assoc($query_pajak);
+                                            $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
+                                            ?>
+                                            <td><?= $nilai_pajak ?>%</td>
+                                            <td><?= $data['jam_lembur'] ?> Jam</td>
+                                            <td>Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
+                                            <td>Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
+                                            <td><?= $data['tanggal_pembayaran'] ?></td>
+                                            <?php if ($data['status'] == 'Sudah Dibayar'): ?>
+                                            <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
+                                            <?php else: ?>
+                                            <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
+                                            <?php endif; ?>
+                                            <td>
+                                                <a target="_blank" href="slip_gaji.php?id_karyawan=<?= $data['id_karyawan'] ?>"
+                                                    class="btn btn-primary">Slip Gaji</a>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
                 </div>

@@ -28,6 +28,7 @@ if ($result->num_rows > 0) {
     ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +41,7 @@ if ($result->num_rows > 0) {
             background-color: #f8f9fa;
             padding: 20px;
         }
+
         .slip-container {
             max-width: 800px;
             margin: 0 auto;
@@ -48,26 +50,31 @@ if ($result->num_rows > 0) {
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             text-align: center;
             padding-bottom: 20px;
             border-bottom: 2px solid #dee2e6;
             margin-bottom: 30px;
         }
+
         .company-logo {
             max-height: 80px;
             margin-bottom: 15px;
         }
+
         .company-name {
             font-size: 24px;
             font-weight: bold;
             color: #2c3e50;
             margin-bottom: 5px;
         }
+
         .company-address {
             color: #666;
             font-size: 14px;
         }
+
         .slip-title {
             font-size: 22px;
             color: #2c3e50;
@@ -75,9 +82,12 @@ if ($result->num_rows > 0) {
             text-align: center;
             font-weight: bold;
         }
-        .employee-details, .salary-details {
+
+        .employee-details,
+        .salary-details {
             margin-bottom: 30px;
         }
+
         .section-title {
             font-size: 18px;
             color: #2c3e50;
@@ -85,30 +95,36 @@ if ($result->num_rows > 0) {
             padding-bottom: 5px;
             border-bottom: 1px solid #eee;
         }
+
         .info-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
             padding: 5px 0;
         }
+
         .info-label {
             font-weight: 600;
             color: #555;
         }
+
         .info-value {
             text-align: right;
         }
+
         .total-section {
             background-color: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
             margin-top: 20px;
         }
+
         .total-amount {
             font-size: 18px;
             color: #28a745;
             font-weight: bold;
         }
+
         .footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -117,39 +133,47 @@ if ($result->num_rows > 0) {
             font-size: 14px;
             color: #666;
         }
+
         .signature-section {
             margin-top: 40px;
             display: flex;
             justify-content: space-between;
         }
+
         .signature-box {
             text-align: center;
             width: 200px;
         }
+
         .signature-line {
             border-top: 1px solid #000;
             margin-top: 50px;
         }
+
         @media print {
             body {
                 background-color: #fff;
                 padding: 0;
             }
+
             .slip-container {
                 box-shadow: none;
                 padding: 0;
             }
+
             .no-print {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body>
-<div class="slip-container">
+    <div class="slip-container">
         <!-- Header Section -->
         <div class="header">
-            <img src="https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-248162.jpg?semt=ais_hybrid" alt="Company Logo" class="company-logo">
+            <img src="https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-248162.jpg?semt=ais_hybrid"
+                alt="Company Logo" class="company-logo">
             <div class="company-name">PT. NAMA PERUSAHAAN</div>
             <div class="company-address">
                 Jl. Contoh No. 123, Makassar<br>
@@ -194,6 +218,14 @@ if ($result->num_rows > 0) {
                         <span class="info-label">Gaji Pokok</span>
                         <span class="info-value">Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-label">Jam Lembur</span>
+                        <span class="info-value"><?= $data['jam_lembur'] ?> Jam</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Bayaran Lembur</span>
+                        <span class="info-value">Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></span>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="info-row">
@@ -203,11 +235,15 @@ if ($result->num_rows > 0) {
                 </div>
             </div>
 
+            <!-- Modify the total calculation to include overtime pay -->
+            <?php
+            $total_gaji = $gaji_bersih + $data['bayaran_lembur'];
+            ?>
             <!-- Total Section -->
             <div class="total-section">
                 <div class="info-row">
                     <span class="info-label">Total Gaji Diterima</span>
-                    <span class="info-value total-amount">Rp <?= number_format($gaji_bersih, 0, ',', '.') ?></span>
+                    <span class="info-value total-amount">Rp <?= number_format($total_gaji, 0, ',', '.') ?></span>
                 </div>
             </div>
         </div>
@@ -238,6 +274,7 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 </body>
+
 </html>
 <?php
 } else {

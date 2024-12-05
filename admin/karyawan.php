@@ -1,29 +1,26 @@
 <?php
 
-    include '../koneksi.php';
+include '../koneksi.php';
 
-    session_start();
+session_start();
 
-        if($_SESSION['status'] != 'login'){
-        
-            session_unset();
-            session_destroy();
-        
-            header("location:../");
-        
-        }
+if ($_SESSION['status'] != 'login') {
+    session_unset();
+    session_destroy();
 
-        if(isset($_GET['hal']) == "hapus"){
+    header('location:../');
+}
 
-            $hapus = mysqli_query($koneksi, "DELETE FROM karyawan WHERE id = '$_GET[id]'");
-          
-            if($hapus){
-                echo "<script>
+if (isset($_GET['hal']) == 'hapus') {
+    $hapus = mysqli_query($koneksi, "DELETE FROM karyawan WHERE id = '$_GET[id]'");
+
+    if ($hapus) {
+        echo "<script>
                 alert('Hapus data sukses!');
                 document.location='karyawan.php';
                 </script>";
-            }
-          }
+    }
+}
 
 ?>
 
@@ -48,80 +45,82 @@
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
 
     <style>
-  /* Modern, clean, and engaging design */
-  body, html {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
-    height: 100%;
-    color: #4a4a4a;
-  }
+        /* Modern, clean, and engaging design */
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f5f7fa, #c3cfe2);
+            height: 100%;
+            color: #4a4a4a;
+        }
 
-  .sidebar {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: #ffffff;
-  }
+        .sidebar {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+        }
 
-  .sidebar .nav-item .nav-link {
-    color: #ffffff;
-    font-weight: 500;
-    transition: all 0.3s ease-in-out;
-  }
+        .sidebar .nav-item .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
 
-  .sidebar .nav-item.active .nav-link,
-  .sidebar .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-  }
+        .sidebar .nav-item.active .nav-link,
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
 
-  .navbar {
-    background: #ffffff;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #4a4a4a;
-    font-weight: 600;
-  }
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #4a4a4a;
+            font-weight: 600;
+        }
 
-  .card {
-    border: none;
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
+        .card {
+            border: none;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
 
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
 
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-  }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
 
-  .card-icon {
-    font-size: 2.5rem;
-    color: rgba(50, 115, 220, 0.8);
-  }
+        .card-icon {
+            font-size: 2.5rem;
+            color: rgba(50, 115, 220, 0.8);
+        }
 
-  .badge {
-    padding: 8px 14px;
-    border-radius: 12px;
-  }
+        .badge {
+            padding: 8px 14px;
+            border-radius: 12px;
+        }
 
-  .badge-danger {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    color: #fff;
-  }
+        .badge-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff;
+        }
 
-  .badge-success {
-    background: linear-gradient(135deg, #42e695, #3bb2b8);
-    color: #fff;
-  }
-  </style>
+        .badge-success {
+            background: linear-gradient(135deg, #42e695, #3bb2b8);
+            color: #fff;
+        }
+    </style>
 
 </head>
 
@@ -190,7 +189,7 @@
                 </div>
             </li>
 
-                        <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -205,17 +204,6 @@
                 </div>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengaturanPajak" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-file-alt"></i>
-                <span>Pengaturan Pajak</span>
-                </a>
-                <div id="pengaturanPajak" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="pajak.php">Pengaturan Pajak</a>
-                </div>
-                </div>
-            </li>
             <!-- Divider -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengajuan"
@@ -223,8 +211,7 @@
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -293,15 +280,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="../assets/img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
+                                <img class="img-profile rounded-circle" src="../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -317,60 +305,63 @@
 
                 <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
 
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                    <a href="tambahkaryawan.php" class="btn btn-primary btn-icon-split">
-                                    <span class="text">Tambah Data</span>
-                                </a>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Email</th>
-                                        <th>Jabatan</th>
-                                        <th>Departemen</th>
-                                        <th>Status</th>
-                                        <th>Gaji Pokok</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <?php
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <a href="tambahkaryawan.php" class="btn btn-primary btn-icon-split">
+                                <span class="text">Tambah Data</span>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Email</th>
+                                            <th>Jabatan</th>
+                                            <th>Departemen</th>
+                                            <th>Status</th>
+                                            <th>Gaji Pokok</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
                                     $no = 1;
                                     $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
                                     while($data = mysqli_fetch_array($tampil)):
                                 ?>
-                                    <tr>
-                                        <td><?= $data['nama'] ?></td>
-                                        <td><?= $data['email'] ?></td>
-                                        <td><?= $data['jabatan'] ?></td>
-                                        <td><?= $data['departemen'] ?></td> 
-                                        <td><?= $data['status'] ?></td> 
-                                        <td><?= $data['gaji_pokok'] ?></td> 
-                                        <td>
-                                        <a href="editkaryawan.php?hal=edit&id=<?= $data['id']?>" class="btn btn-warning btn-circle btn-sm">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </a>
-                                        <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')" href="karyawan.php?hal=hapus&id=<?= $data['id']?>" class="btn btn-danger btn-circle btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        </td>
-                                    </tr>
-                                    <?php
+                                        <tr>
+                                            <td><?= $data['nama'] ?></td>
+                                            <td><?= $data['email'] ?></td>
+                                            <td><?= $data['jabatan'] ?></td>
+                                            <td><?= $data['departemen'] ?></td>
+                                            <td><?= $data['status'] ?></td>
+                                            <td>Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
+                                            <td>
+                                                <a href="editkaryawan.php?hal=edit&id=<?= $data['id'] ?>"
+                                                    class="btn btn-warning btn-circle btn-sm">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </a>
+                                                <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')"
+                                                    href="karyawan.php?hal=hapus&id=<?= $data['id'] ?>"
+                                                    class="btn btn-danger btn-circle btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php
                                         endwhile; 
                                     ?>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 </div>
                 <!-- /.container-fluid -->
