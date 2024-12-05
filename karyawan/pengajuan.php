@@ -428,11 +428,13 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <?php else: ?>
                                             <td><span class="badge badge-danger"><?= $data['status'] ?></span></td>
                                             <?php endif; ?>
-                                            <a href="pengajuan.php?hal=hapus&id=<?= $data['id'] ?>"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda yakin menghapus pengajuan ini?')">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </a>
+                                            <td>
+                                                <a href="pengajuan.php?hal=hapus&id=<?= $data['id'] ?>"
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Apakah Anda yakin menghapus pengajuan ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
+                                                </a>
+                                            </td>
                                         </tr>
                                         <?php endwhile; ?>
                                     </tbody>
