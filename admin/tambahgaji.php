@@ -323,7 +323,7 @@ if (isset($_POST['simpan'])) {
                             <form method="post" class="user" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran"
-                                        class="form-control form-control-user col-6" readonly>
+                                        class="form-control form-control-user col-6">
                                 </div>
                                 <div class="form-group">
                                     <select name="id_karyawan" id="id_karyawan" class="form-control col-6" required>
