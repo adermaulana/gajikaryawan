@@ -355,6 +355,23 @@ if (isset($_GET['hal']) == 'hapus') {
                                                                       FROM karyawan 
                                                                       JOIN jabatan ON karyawan.id_jabatan = jabatan.id");
                                     while($data = mysqli_fetch_array($tampil)):
+
+                                        $timestamp = strtotime($data['tanggal_bergabung']);
+
+                                        // Array nama bulan dalam bahasa Indonesia
+                                        $bulan = [
+                                            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                                        ];
+
+                                        // Dapatkan hari, bulan, dan tahun
+                                        $hari = date('d', $timestamp);
+                                        $nama_bulan = $bulan[date('n', $timestamp) - 1];
+                                        $tahun = date('Y', $timestamp);
+
+                                        // Gabungkan sesuai format yang diminta
+                                        $tanggal_formatted = $hari . ', ' . $nama_bulan . ' ' . $tahun;
+
                                 ?>
                                         <tr>
                                             <td><?= $data['nama'] ?></td>
@@ -366,42 +383,7 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <td><?= $data['status'] ?></td>
                                             <td>Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
-
-                                            <?php
-                                            
-                                            function formatTanggal($tanggal)
-                                            {
-                                                // Array of Indonesian month names
-                                                $bulan = [
-                                                    '01' => 'Januari',
-                                                    '02' => 'Februari',
-                                                    '03' => 'Maret',
-                                                    '04' => 'April',
-                                                    '05' => 'Mei',
-                                                    '06' => 'Juni',
-                                                    '07' => 'Juli',
-                                                    '08' => 'Agustus',
-                                                    '09' => 'September',
-                                                    '10' => 'Oktober',
-                                                    '11' => 'November',
-                                                    '12' => 'Desember',
-                                                ];
-                                            
-                                                // Convert the date to a timestamp
-                                                $timestamp = strtotime($tanggal);
-                                            
-                                                // Extract day, month, and year
-                                                $hari = date('d', $timestamp);
-                                                $namaBulan = $bulan[date('m', $timestamp)];
-                                                $tahun = date('Y', $timestamp);
-                                            
-                                                // Return formatted date
-                                                return "$hari $namaBulan $tahun";
-                                            }
-                                            
-                                            ?>
-
-                                            <td><?= formatTanggal($data['tanggal_bergabung']) ?></td>
+                                            <td><?= $tanggal_formatted ?></td>
                                             <td>
                                                 <a href="editkaryawan.php?hal=edit&id=<?= $data['id'] ?>"
                                                     class="btn btn-warning btn-circle btn-sm">
