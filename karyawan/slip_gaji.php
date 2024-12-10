@@ -12,8 +12,9 @@ $pajak = $result_pajak->fetch_assoc();
 $persentase_pajak = $pajak['pajak'];
 
 // Get employee and salary data
-$query = "SELECT p.*, k.nama, k.jabatan, k.departemen FROM penggajian p
+$query = "SELECT p.*, k.nama, j.jabatan, k.departemen FROM penggajian p
           JOIN karyawan k ON p.id_karyawan = k.id
+          JOIN jabatan j ON k.id_jabatan = j.id
           WHERE p.id = ?";
 $stmt = $koneksi->prepare($query);
 $stmt->bind_param("i", $id);
@@ -26,7 +27,7 @@ if ($result->num_rows > 0) {
     // Calculate tax
     $potongan_pajak = $data['gaji_pokok'] * ($persentase_pajak / 100);
     // Calculate final salary
-    $gaji_bersih = $data['gaji_pokok'] - $potongan_pajak;
+    $gaji_bersih = $data['gaji_pokok'] - $potongan_pajak + $data['tunjangan'];
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -234,11 +235,15 @@ if ($result->num_rows > 0) {
                     </div>
                     <div class="info-row">
                         <span class="info-label">Jam Lembur</span>
-                        <span class="info-value"><?= $data['jam_lembur'] ?> Jam</span>
+                        <span class="info-value"><?= $data['jam_lembur'] ?> Jam * Rp. 30.000</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Bayaran Lembur</span>
                         <span class="info-value">Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Tunjangan</span>
+                        <span class="info-value">Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></span>
                     </div>
                 </div>
                 <div class="col-md-6">

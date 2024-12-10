@@ -41,12 +41,12 @@ if (isset($_POST['simpan'])) {
             "INSERT INTO penggajian (
             id_karyawan, jabatan, bulan_gaji, gaji_pokok, status, 
             tanggal_pembayaran, jam_lembur, hadir, alpa, sakit, 
-            bayaran_lembur, total_gaji
+            bayaran_lembur, total_gaji,tunjangan
         ) VALUES (
             '$_POST[id_karyawan]', '$_POST[jabatan]', '$_POST[bulan_gaji]', 
             '$_POST[gaji_pokok]', '$_POST[status]', '$_POST[tanggal_pembayaran]', 
             '$_POST[jam_lembur]', '$_POST[hadir]', '$_POST[alpa]', '$_POST[sakit]', 
-            '$_POST[bayaran_lembur]', '$_POST[total_gaji]'
+            '$_POST[bayaran_lembur]', '$_POST[total_gaji]', '$_POST[tunjangan]'
         )",
         );
 
@@ -231,6 +231,20 @@ if (isset($_POST['simpan'])) {
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
@@ -254,7 +268,8 @@ if (isset($_POST['simpan'])) {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -366,11 +381,13 @@ if (isset($_POST['simpan'])) {
                                     <select name="id_karyawan" id="id_karyawan" class="form-control col-6" required>
                                         <option value="" disabled selected>Pilih Karyawan</option>
                                         <?php
-                                        $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                        $tampil = mysqli_query($koneksi, "SELECT karyawan.*, jabatan.jabatan, jabatan.gaji AS gaji_pokok, jabatan.tunjangan 
+                                                                      FROM karyawan 
+                                                                      JOIN jabatan ON karyawan.id_jabatan = jabatan.id");
                                         while($data = mysqli_fetch_array($tampil)):
-                                    ?>
+                                        ?>
                                         <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji_pokok'] ?>"
-                                            data-jabatan="<?= $data['jabatan'] ?>"><?= $data['nama'] ?></option>
+                                            data-jabatan="<?= $data['jabatan'] ?>" data-tunjangan="<?= $data['tunjangan'] ?>"><?= $data['nama'] ?></option>
                                         <?php
                                         endwhile; 
                                     ?>
@@ -383,6 +400,11 @@ if (isset($_POST['simpan'])) {
                                 <div class="form-group">
                                     <input type="number" name="gaji_pokok"
                                         class="form-control form-control-user col-6" placeholder="Gaji Pokok"
+                                        readonly>
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" name="tunjangan"
+                                        class="form-control form-control-user col-6" placeholder="Tunjangan"
                                         readonly>
                                 </div>
                                 <!-- <div class="form-group">
@@ -562,6 +584,7 @@ if (isset($_POST['simpan'])) {
 
         function calculateTotalSalary() {
             const gapok = $('#id_karyawan option:selected').data('gaji');
+            const tunjangan = $('#id_karyawan option:selected').data('tunjangan');
             const hadir = parseInt($('#hadir').val()) || 0;
             const alpa = parseInt($('#alpa').val()) || 0;
             const sakit = parseInt($('#sakit').val()) || 0;
@@ -569,7 +592,7 @@ if (isset($_POST['simpan'])) {
 
             // Hitung potongan pajak
             const potongan = nilai_pajak / 100;
-            const totalGajiDasar = gapok * (1 - potongan);
+            const totalGajiDasar = gapok * (1 - potongan) + tunjangan;
 
             // Hitung potongan absensi
             const potonganAlpa = alpa * 50000; // Rp 50.000 per hari alfa
@@ -609,14 +632,16 @@ if (isset($_POST['simpan'])) {
             // ambil data dari elemen option yang dipilih
             const gapok = $('#id_karyawan option:selected').data('gaji');
             const jabatan = $('#id_karyawan option:selected').data('jabatan');
+            const tunjangan = $('#id_karyawan option:selected').data('tunjangan');
 
             // tampilkan data ke element
             $('[name=jabatan]').val(`${jabatan}`);
             $('[name=gaji_pokok]').val(`${gapok}`);
+            $('[name=tunjangan]').val(`${tunjangan}`);
 
             // Hitung total gaji dasar setelah pajak
             const potongan = nilai_pajak / 100; // Konversi persen ke desimal
-            const totalGajiDasar = gapok * (1 - potongan); // Total gaji setelah potongan
+            const totalGajiDasar = gapok * (1 - potongan) + tunjangan; // Total gaji setelah potongan
 
             // Reset jam lembur dan bayaran lembur
             $('#jam_lembur').val(0);

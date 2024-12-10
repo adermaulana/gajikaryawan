@@ -1,86 +1,27 @@
 <?php
+
 include '../koneksi.php';
 
 session_start();
 
-// Check login status
 if ($_SESSION['status'] != 'login') {
     session_unset();
     session_destroy();
+
     header('location:../');
-    exit();
 }
 
-// Check if an employee ID is provided
-if (!isset($_GET['id'])) {
-    echo "<script>
-                alert('ID Karyawan tidak valid!');
-                document.location='karyawan.php';
-              </script>";
-    exit();
-}
+if (isset($_GET['hal']) == 'hapus') {
+    $hapus = mysqli_query($koneksi, "DELETE FROM jabatan WHERE id = '$_GET[id]'");
 
-$id = mysqli_real_escape_string($koneksi, $_GET['id']);
-
-// Fetch current employee data
-$query = mysqli_query($koneksi, "SELECT * FROM karyawan WHERE id = '$id'");
-$karyawan = mysqli_fetch_assoc($query);
-
-if (!$karyawan) {
-    echo "<script>
-                alert('Karyawan tidak ditemukan!');
-                document.location='karyawan.php';
-              </script>";
-    exit();
-}
-
-// Process form submission
-if (isset($_POST['update'])) {
-    // Sanitize and validate input
-    $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
-    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
-    $jabatan = mysqli_real_escape_string($koneksi, $_POST['jabatan']);
-    $departemen = mysqli_real_escape_string($koneksi, $_POST['departemen']);
-    $status = mysqli_real_escape_string($koneksi, $_POST['status']);
-    $email = mysqli_real_escape_string($koneksi, $_POST['email']);
-
-    // Check if password is being changed
-    $password_update = '';
-    if (!empty($_POST['password'])) {
-        $password = md5($_POST['password']);
-        $password_update = ", password = '$password'";
-    }
-
-    // Update query
-    $update = mysqli_query(
-        $koneksi,
-        "UPDATE karyawan 
-                                SET 
-                                nama = '$nama', 
-                                email = '$email', 
-                                username = '$username', 
-                                id_jabatan = '$jabatan', 
-                                departemen = '$departemen',
-                                status = '$status'
-                                $password_update
-                                WHERE id = '$id'",
-    );
-
-    if ($update) {
+    if ($hapus) {
         echo "<script>
-                    alert('Update data sukses!');
-                    document.location='karyawan.php';
-                  </script>";
-    } else {
-        echo "<script>
-                    alert('Update data gagal: " .
-            mysqli_error($koneksi) .
-            "');
-                    document.location='editkaryawan.php?id=$id';
-                  </script>";
+                alert('Hapus data sukses!');
+                document.location='jabatan.php';
+                </script>";
     }
-    exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -102,6 +43,7 @@ if (isset($_POST['update'])) {
 
     <!-- Custom styles for this template-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+
     <style>
         /* Modern, clean, and engaging design */
         body,
@@ -275,6 +217,7 @@ if (isset($_POST['update'])) {
                     </div>
                 </div>
             </li>
+
             <!-- Divider -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pengajuan"
@@ -289,8 +232,8 @@ if (isset($_POST['update'])) {
                     </div>
                 </div>
             </li>
-            <hr class="sidebar-divider">
 
+            <hr class="sidebar-divider">
 
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -374,80 +317,60 @@ if (isset($_POST['update'])) {
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Data Karyawan</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Data Jabatan</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <a href="karyawan.php" class="btn btn-success btn-icon-split">
-                                <span class="text">Kembali</span>
+                            <a href="tambahjabatan.php" class="btn btn-primary btn-icon-split">
+                                <span class="text">Tambah Data</span>
                             </a>
                         </div>
                         <div class="card-body">
-                            <form method="post" class="user">
-                                <div class="form-group">
-                                    <input type="text" name="nama" class="form-control form-control-user col-6"
-                                        placeholder="Nama" value="<?= htmlspecialchars($karyawan['nama']) ?>"
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" name="email" class="form-control form-control-user col-6"
-                                        placeholder="Email" value="<?= htmlspecialchars($karyawan['email']) ?>"
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" name="username"
-                                        class="form-control form-control-user col-6" placeholder="Username"
-                                        value="<?= htmlspecialchars($karyawan['username']) ?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" name="password"
-                                        class="form-control form-control-user col-6"
-                                        placeholder="Password (kosongkan jika tidak ingin mengubah)">
-                                </div>
-                                <div class="form-group">
-                                    <select name="jabatan" id="id_jabatan" class="form-control col-6" required>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Jabatan</th>
+                                            <th>Gaji Pokok</th>
+                                            <th>Tunjangan</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         <?php
-                                        $tampil = mysqli_query($koneksi, "SELECT * FROM jabatan");
-                                        while($data = mysqli_fetch_array($tampil)):
-                                        ?>
-                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji'] ?>"
-                                            data-tunjangan="<?= $data['tunjangan'] ?>"
-                                            <?= $karyawan['id_jabatan'] == $data['id'] ? 'selected' : '' ?>>
-                                            <?= $data['jabatan'] ?></option>
+                                    $no = 1;
+                                    $tampil = mysqli_query($koneksi, "SELECT * FROM jabatan");
+                                    while($data = mysqli_fetch_array($tampil)):
+                                ?>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><?= $data['jabatan'] ?></td>
+                                            <td>Rp <?= number_format($data['gaji'], 0, ',', '.') ?></td>
+                                            <td>Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
+                                            <td>
+                                                <a href="editjabatan.php?hal=edit&id=<?= $data['id'] ?>"
+                                                    class="btn btn-warning btn-circle btn-sm">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </a>
+                                                <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')"
+                                                    href="jabatan.php?hal=hapus&id=<?= $data['id'] ?>"
+                                                    class="btn btn-danger btn-circle btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                         <?php
                                         endwhile; 
                                     ?>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <select name="departemen" class="form-control col-6" required>
-                                        <option value="Keuangan"
-                                            <?= $karyawan['departemen'] == 'Keuangan' ? 'selected' : '' ?>>Keuangan
-                                        </option>
-                                        <option value="Sales"
-                                            <?= $karyawan['departemen'] == 'Sales' ? 'selected' : '' ?>>Sales</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <select name="status" class="form-control col-6" required>
-                                        <option value="Pegawai Tetap"
-                                            <?= $karyawan['status'] == 'Pegawai Tetap' ? 'selected' : '' ?>>
-                                            Pegawai Tetap</option>
-                                        <option value="Magang"
-                                            <?= $karyawan['status'] == 'Magang' ? 'selected' : '' ?>>Magang
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" name="update" class="btn btn-primary btn-icon-split">
-                                        <span class="text">Update</span>
-                                    </button>
-                                </div>
-                            </form>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 

@@ -189,6 +189,20 @@ if (isset($_GET['hal']) == 'hapus') {
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
@@ -211,7 +225,8 @@ if (isset($_GET['hal']) == 'hapus') {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -326,13 +341,16 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <th>Departemen</th>
                                             <th>Status</th>
                                             <th>Gaji Pokok</th>
+                                            <th>Tunjangan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                     $no = 1;
-                                    $tampil = mysqli_query($koneksi, "SELECT * FROM karyawan");
+                                    $tampil = mysqli_query($koneksi, "SELECT karyawan.*, jabatan.jabatan, jabatan.gaji AS gaji_pokok, jabatan.tunjangan 
+                                                                      FROM karyawan 
+                                                                      JOIN jabatan ON karyawan.id_jabatan = jabatan.id");
                                     while($data = mysqli_fetch_array($tampil)):
                                 ?>
                                         <tr>
@@ -342,6 +360,7 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <td><?= $data['departemen'] ?></td>
                                             <td><?= $data['status'] ?></td>
                                             <td>Rp <?= number_format($data['gaji_pokok'], 0, ',', '.') ?></td>
+                                            <td>Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
                                             <td>
                                                 <a href="editkaryawan.php?hal=edit&id=<?= $data['id'] ?>"
                                                     class="btn btn-warning btn-circle btn-sm">

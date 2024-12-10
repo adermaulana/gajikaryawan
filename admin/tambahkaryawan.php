@@ -16,8 +16,8 @@ if (isset($_POST['simpan'])) {
 
     $simpan = mysqli_query(
         $koneksi,
-        "INSERT INTO karyawan (nama,email, username, password, jabatan, departemen, gaji_pokok, status) 
-            VALUES ('$_POST[nama]','$_POST[email]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]', '$_POST[gaji_pokok]', '$_POST[status]')",
+        "INSERT INTO karyawan (nama,email, username, password, id_jabatan, departemen, status) 
+            VALUES ('$_POST[nama]','$_POST[email]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]','$_POST[status]')",
     );
 
     if ($simpan) {
@@ -201,6 +201,21 @@ if (isset($_POST['simpan'])) {
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -221,7 +236,8 @@ if (isset($_POST['simpan'])) {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -343,12 +359,17 @@ if (isset($_POST['simpan'])) {
                                         class="form-control form-control-user col-6" placeholder="Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <select name="jabatan" class="form-control col-6" required>
+                                    <select name="jabatan" id="id_jabatan" class="form-control col-6" required>
                                         <option value="" disabled selected>Pilih Jabatan</option>
-                                        <option value="Manager">Manager</option>
-                                        <option value="Staff">Staff</option>
-                                        <option value="Supervisor">Supervisor</option>
-                                        <option value="Intern">Intern</option>
+                                        <?php
+                                        $tampil = mysqli_query($koneksi, "SELECT * FROM jabatan");
+                                        while($data = mysqli_fetch_array($tampil)):
+                                        ?>
+                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji'] ?>" data-tunjangan="<?= $data['tunjangan'] ?>">
+                                            <?= $data['jabatan'] ?></option>
+                                        <?php
+                                        endwhile; 
+                                    ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -361,13 +382,18 @@ if (isset($_POST['simpan'])) {
                                 <div class="form-group">
                                     <select name="status" class="form-control col-6" required>
                                         <option value="" disabled selected>Pilih Status</option>
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="Tidak Aktif">Tidak Aktif</option>
+                                        <option value="Pegawai Tetap">Pegawai Tetap</option>
+                                        <option value="Magang">Magang</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="gaji_pokok"
+                                    <input type="text" name="gaji_pokok" readonly
                                         class="form-control form-control-user col-6" placeholder="Gaji Pokok"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="tunjangan" readonly
+                                        class="form-control form-control-user col-6" placeholder="Tunjangan"
                                         required>
                                 </div>
                                 <div class="form-group">
@@ -442,6 +468,18 @@ if (isset($_POST['simpan'])) {
     <!-- Page level custom scripts -->
     <script src="../assets/js/demo/chart-area-demo.js"></script>
     <script src="../assets/js/demo/chart-pie-demo.js"></script>
+
+    <script>
+        $('#id_jabatan').on('change', function() {
+            // ambil data dari elemen option yang dipilih
+            const gaji = $('#id_jabatan option:selected').data('gaji');
+            const tunjangan = $('#id_jabatan option:selected').data('tunjangan');
+
+            $('[name=gaji_pokok]').val(`${gaji}`);
+            $('[name=tunjangan]').val(`${tunjangan}`);
+
+        });
+    </script>
 
 </body>
 

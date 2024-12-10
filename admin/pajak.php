@@ -233,6 +233,20 @@ $data = mysqli_fetch_assoc($query);
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"

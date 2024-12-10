@@ -441,6 +441,7 @@ if (isset($_GET['end_date'])) {
                                             <th>Sakit</th>a
                                             <th>Jam Lembur</th>
                                             <th>Bayaran Lembur</th>
+                                            <th>Tunjangan</th>
                                             <th>Total Gaji</th>
                                             <th>Tanggal Pembayaran</th>
                                             <th>Status</th>
@@ -485,6 +486,7 @@ if (isset($_GET['end_date'])) {
                                             <td><?= $data['sakit'] ?> Hari</td>
                                             <td><?= $data['jam_lembur'] ?> Jam</td>
                                             <td>Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
+                                            <td>Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
                                             <td><?= $data['tanggal_pembayaran'] ?></td>
                                             <?php if ($data['status'] == 'Sudah Dibayar'): ?>

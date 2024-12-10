@@ -89,6 +89,7 @@ $result = mysqli_query($koneksi, $query);
                 <th>Sakit</th>
                 <th>Jam Lembur</th>
                 <th>Bayaran Lembur</th>
+                <th>Tunjangan</th>
                 <th>Total Gaji</th>
                 <th>Status</th>
             </tr>
@@ -118,6 +119,7 @@ $result = mysqli_query($koneksi, $query);
                 <td><?= $data['sakit'] ?> Hari</td>
                 <td><?= $data['jam_lembur'] ?> Jam</td>
                 <td class="currency">Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
+                <td class="currency">Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
                 <td class="currency">Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
                 <td><?= $data['status'] ?></td>
             </tr>

@@ -189,6 +189,20 @@ if (isset($_GET['hal']) == 'hapus') {
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
@@ -212,7 +226,8 @@ if (isset($_GET['hal']) == 'hapus') {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>

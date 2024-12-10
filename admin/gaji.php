@@ -186,6 +186,20 @@ if (isset($_GET['hal']) == 'hapus') {
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#jabatan"
+                    aria-expanded="true" aria-controls="jabatan">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Jabatan</span>
+                </a>
+                <div id="jabatan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="jabatan.php">Jabatan</a>
+                        <a class="collapse-item" href="tambahjabatan.php">Tambah Data</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laporanGaji"
@@ -209,7 +223,8 @@ if (isset($_GET['hal']) == 'hapus') {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Pengajuan Naik Gaji</span>
                 </a>
-                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="pengajuan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="pengajuan.php">Lihat Ajuan Gaji</a>
                     </div>
@@ -328,6 +343,7 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <th>Sakit</th>
                                             <th>Jam Lembur</th>
                                             <th>Bayaran Lembur</th>
+                                            <th>Tunjangan</th>
                                             <th>Total Gaji</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
@@ -360,6 +376,7 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <td><?= $data['sakit'] ?> Hari</td>
                                             <td><?= $data['jam_lembur'] ?> Jam</td>
                                             <td>Rp <?= number_format($data['bayaran_lembur'], 0, ',', '.') ?></td>
+                                            <td>Rp <?= number_format($data['tunjangan'], 0, ',', '.') ?></td>
                                             <td>Rp <?= number_format($data['total_gaji'], 0, ',', '.') ?></td>
                                             <?php if ($data['status'] == 'Sudah Dibayar'): ?>
                                             <td><span class="badge badge-success"><?= $data['status'] ?></span></td>
