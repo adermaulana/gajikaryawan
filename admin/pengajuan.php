@@ -345,9 +345,11 @@ if (isset($_GET['hal']) == 'hapus') {
                                     <tbody>
                                         <?php
                                     $no = 1;
-                                    $tampil = mysqli_query($koneksi, "SELECT p.*, k.nama, k.departemen, k.jabatan  
+                                    $tampil = mysqli_query($koneksi, "SELECT p.*, k.nama, k.departemen, j.jabatan  
                                                                     FROM pengajuan p 
-                                                                    JOIN karyawan k ON p.id_karyawan = k.id");
+                                                                    JOIN karyawan k ON p.id_karyawan = k.id
+                                                                    JOIN jabatan j ON k.id_jabatan = j.id
+                                                                    ");
                                     while($data = mysqli_fetch_array($tampil)):
                                     ?>
                                         <tr>
@@ -355,7 +357,7 @@ if (isset($_GET['hal']) == 'hapus') {
                                             <td><?= $data['nama'] ?></td>
                                             <td><?= $data['jabatan'] ?></td>
                                             <td><?= $data['departemen'] ?></td>
-                                            <td><?= number_format($data['nominal'], 0, ',', '.') ?></td>
+                                            <td>Rp. <?= number_format($data['nominal'], 0, ',', '.') ?></td>
                                             <td><?= $data['alasan'] ?></td>
                                             <?php if ($data['status'] == 'diterima'): ?>
                                             <td><span class="badge badge-success"><?= $data['status'] ?></span></td>

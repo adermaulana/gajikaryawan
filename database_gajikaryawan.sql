@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2024 at 02:24 PM
+-- Generation Time: Dec 10, 2024 at 10:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,16 +24,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gaji_detail`
+-- Table structure for table `jabatan`
 --
 
-CREATE TABLE `gaji_detail` (
+CREATE TABLE `jabatan` (
   `id` int(11) NOT NULL,
-  `id_penggajian` int(11) DEFAULT NULL,
-  `deskripsi` varchar(100) NOT NULL,
-  `jumlah` decimal(15,2) NOT NULL,
-  `tipe` enum('tunjangan','potongan') NOT NULL
+  `jabatan` varchar(255) NOT NULL,
+  `gaji` decimal(15,0) NOT NULL,
+  `tunjangan` decimal(15,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `jabatan`
+--
+
+INSERT INTO `jabatan` (`id`, `jabatan`, `gaji`, `tunjangan`) VALUES
+(1, 'Manager', 10000000, 500000),
+(2, 'Supervisor', 6000000, 250000),
+(3, 'Magang', 2000000, 0);
 
 -- --------------------------------------------------------
 
@@ -47,10 +55,9 @@ CREATE TABLE `karyawan` (
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `jabatan` varchar(100) NOT NULL,
+  `id_jabatan` int(11) NOT NULL,
   `departemen` varchar(100) DEFAULT NULL,
-  `gaji_pokok` decimal(15,2) NOT NULL,
-  `status` enum('aktif','non-aktif') DEFAULT 'aktif',
+  `status` enum('Pegawai Tetap','Magang') DEFAULT NULL,
   `tanggal_bergabung` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -101,6 +108,7 @@ CREATE TABLE `penggajian` (
   `jam_lembur` int(20) NOT NULL,
   `bayaran_lembur` decimal(10,0) NOT NULL,
   `total_gaji` decimal(10,0) NOT NULL,
+  `tunjangan` decimal(15,0) NOT NULL,
   `status` varchar(255) NOT NULL,
   `tanggal_pembayaran` date NOT NULL,
   `hadir` int(20) NOT NULL,
@@ -133,17 +141,17 @@ INSERT INTO `user` (`id`, `nama`, `username`, `password`) VALUES
 --
 
 --
--- Indexes for table `gaji_detail`
+-- Indexes for table `jabatan`
 --
-ALTER TABLE `gaji_detail`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_penggajian` (`id_penggajian`);
+ALTER TABLE `jabatan`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_jabatan` (`id_jabatan`);
 
 --
 -- Indexes for table `pajak`
@@ -176,16 +184,16 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `gaji_detail`
+-- AUTO_INCREMENT for table `jabatan`
 --
-ALTER TABLE `gaji_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `jabatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `pajak`
@@ -197,13 +205,13 @@ ALTER TABLE `pajak`
 -- AUTO_INCREMENT for table `pengajuan`
 --
 ALTER TABLE `pengajuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `penggajian`
 --
 ALTER TABLE `penggajian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -216,10 +224,10 @@ ALTER TABLE `user`
 --
 
 --
--- Constraints for table `gaji_detail`
+-- Constraints for table `karyawan`
 --
-ALTER TABLE `gaji_detail`
-  ADD CONSTRAINT `gaji_detail_ibfk_1` FOREIGN KEY (`id_penggajian`) REFERENCES `penggajian` (`id`);
+ALTER TABLE `karyawan`
+  ADD CONSTRAINT `karyawan_ibfk_1` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pengajuan`
