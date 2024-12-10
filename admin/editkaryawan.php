@@ -38,11 +38,14 @@ if (!$karyawan) {
 if (isset($_POST['update'])) {
     // Sanitize and validate input
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
+    $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
+    $jenis_kelamin = mysqli_real_escape_string($koneksi, $_POST['jenis_kelamin']);
     $username = mysqli_real_escape_string($koneksi, $_POST['username']);
     $jabatan = mysqli_real_escape_string($koneksi, $_POST['jabatan']);
     $departemen = mysqli_real_escape_string($koneksi, $_POST['departemen']);
     $status = mysqli_real_escape_string($koneksi, $_POST['status']);
     $email = mysqli_real_escape_string($koneksi, $_POST['email']);
+    $tanggal_masuk = mysqli_real_escape_string($koneksi, $_POST['tanggal_masuk']);
 
     // Check if password is being changed
     $password_update = '';
@@ -57,11 +60,14 @@ if (isset($_POST['update'])) {
         "UPDATE karyawan 
                                 SET 
                                 nama = '$nama', 
+                                nik = '$nik', 
+                                jenis_kelamin = '$jenis_kelamin', 
                                 email = '$email', 
                                 username = '$username', 
                                 id_jabatan = '$jabatan', 
                                 departemen = '$departemen',
-                                status = '$status'
+                                status = '$status',
+                                tanggal_bergabung = '$tanggal_masuk'
                                 $password_update
                                 WHERE id = '$id'",
     );
@@ -394,6 +400,17 @@ if (isset($_POST['update'])) {
                                         required>
                                 </div>
                                 <div class="form-group">
+                                    <input type="text" name="nik" class="form-control form-control-user col-6"
+                                        placeholder="Nik" value="<?= htmlspecialchars($karyawan['nik']) ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <select name="jenis_kelamin" class="form-control col-6" required>
+                                        <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                                        <option value="Laki-Laki" <?= $karyawan['jenis_kelamin'] == 'Laki-Laki' ? 'selected' : '' ?>>Laki-Laki</option>
+                                        <option value="Perempuan" <?= $karyawan['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <input type="text" name="email" class="form-control form-control-user col-6"
                                         placeholder="Email" value="<?= htmlspecialchars($karyawan['email']) ?>"
                                         required>
@@ -441,6 +458,12 @@ if (isset($_POST['update'])) {
                                             <?= $karyawan['status'] == 'Magang' ? 'selected' : '' ?>>Magang
                                         </option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="">Tanggal Masuk</label>
+                                    <input type="date" name="tanggal_masuk" id="tanggal_masuk"
+                                        value="<?= $karyawan['tanggal_bergabung'] ?>"
+                                        class="form-control form-control-user col-6">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" name="update" class="btn btn-primary btn-icon-split">

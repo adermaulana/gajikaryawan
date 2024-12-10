@@ -16,8 +16,8 @@ if (isset($_POST['simpan'])) {
 
     $simpan = mysqli_query(
         $koneksi,
-        "INSERT INTO karyawan (nama,email, username, password, id_jabatan, departemen, status) 
-            VALUES ('$_POST[nama]','$_POST[email]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]','$_POST[status]')",
+        "INSERT INTO karyawan (nama,nik,jenis_kelamin,email, username, password, id_jabatan, departemen, status, tanggal_bergabung) 
+            VALUES ('$_POST[nama]','$_POST[nik]','$_POST[jenis_kelamin]','$_POST[email]', '$_POST[username]', '$password', '$_POST[jabatan]', '$_POST[departemen]','$_POST[status]','$_POST[tanggal_masuk]')",
     );
 
     if ($simpan) {
@@ -347,6 +347,21 @@ if (isset($_POST['simpan'])) {
                                         placeholder="Nama" required>
                                 </div>
                                 <div class="form-group">
+                                    <input type="number" name="nik" class="form-control form-control-user col-6"
+                                        placeholder="NIK" required>
+                                </div>
+                                <div class="form-group">
+                                    <select name="jenis_kelamin" class="form-control col-6" required>
+                                        <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                                        <option value="Laki-Laki">Laki-Laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="nama" class="form-control form-control-user col-6"
+                                        placeholder="Nama" required>
+                                </div>
+                                <div class="form-group">
                                     <input type="text" name="email" class="form-control form-control-user col-6"
                                         placeholder="Email" required>
                                 </div>
@@ -365,7 +380,8 @@ if (isset($_POST['simpan'])) {
                                         $tampil = mysqli_query($koneksi, "SELECT * FROM jabatan");
                                         while($data = mysqli_fetch_array($tampil)):
                                         ?>
-                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji'] ?>" data-tunjangan="<?= $data['tunjangan'] ?>">
+                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji'] ?>"
+                                            data-tunjangan="<?= $data['tunjangan'] ?>">
                                             <?= $data['jabatan'] ?></option>
                                         <?php
                                         endwhile; 
@@ -393,8 +409,12 @@ if (isset($_POST['simpan'])) {
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="tunjangan" readonly
-                                        class="form-control form-control-user col-6" placeholder="Tunjangan"
-                                        required>
+                                        class="form-control form-control-user col-6" placeholder="Tunjangan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="">Tanggal Masuk</label>
+                                    <input type="date" name="tanggal_masuk" id="tanggal_masuk"
+                                        class="form-control form-control-user col-6">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
@@ -479,6 +499,20 @@ if (isset($_POST['simpan'])) {
             $('[name=tunjangan]').val(`${tunjangan}`);
 
         });
+    </script>
+
+    <script>
+        // Mendapatkan tanggal saat ini
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0'); // Januari = 0
+        var year = today.getFullYear();
+
+        // Format tanggal menjadi YYYY-MM-DD
+        var currentDate = year + '-' + month + '-' + day;
+
+        // Set tanggal pada input field
+        document.getElementById('tanggal_masuk').value = currentDate;
     </script>
 
 </body>
