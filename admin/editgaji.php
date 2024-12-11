@@ -1,5 +1,4 @@
 <?php
-
 include '../koneksi.php';
 
 session_start();
@@ -7,8 +6,31 @@ session_start();
 if ($_SESSION['status'] != 'login') {
     session_unset();
     session_destroy();
-
     header('location:../');
+    exit();
+}
+
+// Check if an ID is provided for editing
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "<script>
+        alert('ID Gaji tidak valid!');
+        document.location='gaji.php';
+    </script>";
+    exit();
+}
+
+$id_gaji = $_GET['id'];
+
+// Fetch existing salary record
+$query = mysqli_query($koneksi, "SELECT * FROM penggajian WHERE id = '$id_gaji'");
+$data_gaji = mysqli_fetch_assoc($query);
+
+if (!$data_gaji) {
+    echo "<script>
+        alert('Data gaji tidak ditemukan!');
+        document.location='gaji.php';
+    </script>";
+    exit();
 }
 
 if (isset($_POST['simpan'])) {
@@ -17,13 +39,14 @@ if (isset($_POST['simpan'])) {
     $tanggal_pembayaran = $_POST['tanggal_pembayaran'];
     $id_karyawan = $_POST['id_karyawan'];
 
-    // Check for existing entry for the same month, year, and employee
+    // Check for existing entry for the same month, year, and employee, excluding current record
     $cek_duplikat = mysqli_query(
         $koneksi,
         "SELECT * FROM penggajian 
         WHERE id_karyawan = '$id_karyawan' 
         AND bulan_gaji = '$bulan_gaji' 
-        AND YEAR(tanggal_pembayaran) = YEAR('$tanggal_pembayaran')",
+        AND YEAR(tanggal_pembayaran) = YEAR('$tanggal_pembayaran')
+        AND id != '$id_gaji'"
     );
 
     if (mysqli_num_rows($cek_duplikat) > 0) {
@@ -32,38 +55,47 @@ if (isset($_POST['simpan'])) {
             alert('Data gaji untuk $bulan_gaji tahun " .
             date('Y', strtotime($tanggal_pembayaran)) .
             " sudah ada!');
-            document.location='tambahgaji.php';
+            document.location='editgaji.php?id=$id_gaji';
         </script>";
     } else {
-        // No duplicate found, proceed with insertion
-        $simpan = mysqli_query(
+        // No duplicate found, proceed with update
+        $update = mysqli_query(
             $koneksi,
-            "INSERT INTO penggajian (
-            id_karyawan, jabatan, bulan_gaji, gaji_pokok, status, 
-            tanggal_pembayaran, jam_lembur, hadir, alpa, sakit, 
-            bayaran_lembur, total_gaji,tunjangan
-        ) VALUES (
-            '$_POST[id_karyawan]', '$_POST[jabatan]', '$_POST[bulan_gaji]', 
-            '$_POST[gaji_pokok]', '$_POST[status]', '$_POST[tanggal_pembayaran]', 
-            '$_POST[jam_lembur]', '$_POST[hadir]', '$_POST[alpa]', '$_POST[sakit]', 
-            '$_POST[bayaran_lembur]', '$_POST[total_gaji]', '$_POST[tunjangan]'
-        )",
+            "UPDATE penggajian SET
+            id_karyawan = '$_POST[id_karyawan]', 
+            jabatan = '$_POST[jabatan]', 
+            bulan_gaji = '$_POST[bulan_gaji]', 
+            gaji_pokok = '$_POST[gaji_pokok]', 
+            status = '$_POST[status]', 
+            tanggal_pembayaran = '$_POST[tanggal_pembayaran]', 
+            jam_lembur = '$_POST[jam_lembur]', 
+            hadir = '$_POST[hadir]', 
+            alpa = '$_POST[alpa]', 
+            sakit = '$_POST[sakit]', 
+            bayaran_lembur = '$_POST[bayaran_lembur]', 
+            total_gaji = '$_POST[total_gaji]',
+            tunjangan = '$_POST[tunjangan]'
+            WHERE id = '$id_gaji'"
         );
 
-        if ($simpan) {
+        if ($update) {
             echo "<script>
-                alert('Simpan data sukses!');
+                alert('Update data sukses!');
                 document.location='gaji.php';
             </script>";
         } else {
             echo "<script>
-                alert('Simpan data Gagal!');
-                document.location='gaji.php';
+                alert('Update data Gagal!');
+                document.location='editgaji.php?id=$id_gaji';
             </script>";
         }
     }
 }
 
+// Query untuk mengambil nilai pajak
+$query_pajak = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
+$data_pajak = mysqli_fetch_assoc($query_pajak);
+$nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +117,7 @@ if (isset($_POST['simpan'])) {
 
     <!-- Custom styles for this template-->
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+
 
     <style>
         /* Modern, clean, and engaging design */
@@ -372,22 +405,29 @@ if (isset($_POST['simpan'])) {
                             </a>
                         </div>
                         <div class="card-body">
-                            <form method="post" class="user" enctype="multipart/form-data">
+<form method="post" class="user" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <input type="date" name="tanggal_pembayaran" id="tanggal_pembayaran"
-                                        class="form-control form-control-user col-6">
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['tanggal_pembayaran'] ?>">
                                 </div>
                                 <div class="form-group">
-                                    <select name="id_karyawan" id="id_karyawan" class="form-control col-6" required>
-                                        <option value="" disabled selected>Pilih Karyawan</option>
+                                    <input type="hidden" name="id_karyawan" value="<?= $data_gaji['id_karyawan'] ?>">
+                                    <select  id="id_karyawan" class="form-control col-6" style="appearance: none; -webkit-appearance: none; -moz-appearance: none;" required disabled>
+                                        <option value="" disabled>Pilih Karyawan</option>
                                         <?php
                                         $tampil = mysqli_query($koneksi, "SELECT karyawan.*, jabatan.jabatan, jabatan.gaji AS gaji_pokok, jabatan.tunjangan 
                                                                       FROM karyawan 
                                                                       JOIN jabatan ON karyawan.id_jabatan = jabatan.id");
                                         while($data = mysqli_fetch_array($tampil)):
                                         ?>
-                                        <option value="<?= $data['id'] ?>" data-gaji="<?= $data['gaji_pokok'] ?>"
-                                            data-jabatan="<?= $data['jabatan'] ?>" data-tunjangan="<?= $data['tunjangan'] ?>"><?= $data['nama'] ?></option>
+                                        <option value="<?= $data['id'] ?>" 
+                                            data-gaji="<?= $data['gaji_pokok'] ?>"
+                                            data-jabatan="<?= $data['jabatan'] ?>" 
+                                            data-tunjangan="<?= $data['tunjangan'] ?>"
+                                            <?= $data['id'] == $data_gaji['id_karyawan'] ? 'selected' : '' ?>>
+                                            <?= $data['nama'] ?>
+                                        </option>
                                         <?php
                                         endwhile; 
                                     ?>
@@ -395,29 +435,19 @@ if (isset($_POST['simpan'])) {
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="jabatan" class="form-control form-control-user col-6"
-                                        placeholder="Jabatan" readonly>
+                                        placeholder="Jabatan" readonly 
+                                        value="<?= $data_gaji['jabatan'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <input type="number" name="gaji_pokok"
                                         class="form-control form-control-user col-6" placeholder="Gaji Pokok"
-                                        readonly>
+                                        readonly value="<?= $data_gaji['gaji_pokok'] ?>">
                                 </div>
                                 <div class="form-group">
                                     <input type="number" name="tunjangan"
                                         class="form-control form-control-user col-6" placeholder="Tunjangan"
-                                        readonly>
+                                        readonly value="<?= $data_gaji['tunjangan'] ?>">
                                 </div>
-                                <!-- <div class="form-group">
-                                    <input type="number" name="tunjangan" class="form-control form-control-user col-6"
-                                        placeholder="Tunjangan" readonly>
-                                </div> -->
-
-                                <?php
-                                // Query untuk mengambil nilai pajak
-                                $query_pajak = mysqli_query($koneksi, 'SELECT * FROM pajak LIMIT 1');
-                                $data_pajak = mysqli_fetch_assoc($query_pajak);
-                                $nilai_pajak = isset($data_pajak['pajak']) ? $data_pajak['pajak'] : 0;
-                                ?>
 
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user col-6"
@@ -426,71 +456,80 @@ if (isset($_POST['simpan'])) {
                                 </div>
                                 <div class="form-group">
                                     <select name="bulan_gaji" class="form-control col-6" required>
-                                        <option value="" disabled selected>Pilih Bulan Gaji</option>
-                                        <option value="Januari">Januari</option>
-                                        <option value="Februari">Februari</option>
-                                        <option value="Maret">Maret</option>
-                                        <option value="April">April</option>
-                                        <option value="Mei">Mei</option>
-                                        <option value="Juni">Juni</option>
-                                        <option value="Juli">Juli</option>
-                                        <option value="Agustus">Agustus</option>
-                                        <option value="September">September</option>
-                                        <option value="Oktober">Oktober</option>
-                                        <option value="November">November</option>
-                                        <option value="Desember">Desember</option>
+                                        <option value="" disabled>Pilih Bulan Gaji</option>
+                                        <?php
+                                        $bulan_list = [
+                                            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                                        ];
+                                        foreach($bulan_list as $bulan):
+                                        ?>
+                                        <option value="<?= $bulan ?>" 
+                                            <?= $bulan == $data_gaji['bulan_gaji'] ? 'selected' : '' ?>>
+                                            <?= $bulan ?>
+                                        </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="hadir">Hari Hadir</label>
                                     <input type="number" name="hadir" id="hadir"
-                                        class="form-control form-control-user col-6"
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['hadir'] ?>"
                                         placeholder="Jumlah Hari Hadir" min="0" max="31" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="alpa">Potongan Hari Alpa (per hari): Rp
-                                        50.000</label>
+                                    <label class="form-label" for="alpa">Potongan Hari Alpa (per hari): Rp 50.000</label>
                                     <input type="number" name="alpa" id="alpa"
-                                        class="form-control form-control-user col-6"
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['alpa'] ?>"
                                         placeholder="Jumlah Hari Alfa" min="0" max="31" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="sakit">Potongan Hari Sakit (per hari): Rp
-                                        25.000</label>
+                                    <label class="form-label" for="sakit">Potongan Hari Sakit (per hari): Rp 25.000</label>
                                     <input type="number" name="sakit" id="sakit"
-                                        class="form-control form-control-user col-6"
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['sakit'] ?>"
                                         placeholder="Jumlah Hari Sakit" min="0" max="31" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="">Jam Lembur</label>
                                     <input type="number" name="jam_lembur" id="jam_lembur"
-                                        class="form-control form-control-user col-6" placeholder="Jam Lembur"
-                                        min="0">
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['jam_lembur'] ?>"
+                                        placeholder="Jam Lembur" min="0">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="">Bayaran Lembur (per jam): Rp
-                                        30.000</label>
+                                    <label class="form-label" for="">Bayaran Lembur (per jam): Rp 30.000</label>
                                     <input type="number" name="bayaran_lembur" id="bayaran_lembur"
-                                        class="form-control form-control-user col-6" placeholder="" readonly>
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['bayaran_lembur'] ?>"
+                                        placeholder="" readonly>
                                 </div>
                                 <div class="form-group">
                                     <input type="number" id="total_gaji" name="total_gaji"
-                                        class="form-control form-control-user col-6" placeholder="Total Gaji"
-                                        readonly>
+                                        class="form-control form-control-user col-6" 
+                                        value="<?= $data_gaji['total_gaji'] ?>"
+                                        placeholder="Total Gaji" readonly>
                                 </div>
                                 <div class="form-group">
                                     <select name="status" class="form-control col-6" required>
-                                        <option value="" disabled selected>Status</option>
-                                        <option value="Belum Dibayar">Belum Dibayar</option>
-                                        <option value="Sudah Dibayar">Sudah Dibayar</option>
-
+                                        <option value="" disabled>Status</option>
+                                        <option value="Belum Dibayar" 
+                                            <?= $data_gaji['status'] == 'Belum Dibayar' ? 'selected' : '' ?>>
+                                            Belum Dibayar
+                                        </option>
+                                        <option value="Sudah Dibayar" 
+                                            <?= $data_gaji['status'] == 'Sudah Dibayar' ? 'selected' : '' ?>>
+                                            Sudah Dibayar
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" name="simpan" class="btn btn-primary btn-icon-split">
-                                        <span class="text">Simpan</span>
+                                        <span class="text">Update</span>
                                     </button>
                                 </div>
                             </form>

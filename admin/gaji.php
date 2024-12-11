@@ -434,6 +434,11 @@ if (isset($_GET['hal']) == 'hapus') {
 
                                             <?php endif; ?>
                                             <td>
+                                                <a
+                                                    href="editgaji.php?id=<?= $data['id'] ?>"
+                                                    class="btn btn-warning btn-circle btn-sm">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </a>
                                                 <a onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')"
                                                     href="gaji.php?hal=hapus&id=<?= $data['id'] ?>"
                                                     class="btn btn-danger btn-circle btn-sm">
